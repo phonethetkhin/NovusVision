@@ -16,10 +16,10 @@ interface UserSeriesDao {
     @Delete
     suspend fun deleteUserSeries(userSeriesEntity: UserSeriesEntity)
 
-    @Query("SELECT * FROM tbl_user")
+    @Query("SELECT * FROM tbl_user_series")
     suspend fun getAllUserSeries(): List<UserSeriesEntity>
 
 
-    @Query("DELETE FROM tbl_user")
+    @Query("DELETE FROM tbl_user_series")
     suspend fun deleteAllUserSeries()
 }

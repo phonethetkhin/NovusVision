@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Novus Vision</string>
+
+    <string name="permission_denied">App is need this permission for load and save data from your device.</string>
 </resources>
