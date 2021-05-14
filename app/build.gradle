@@ -60,4 +60,8 @@ dependencies {
     //Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+
+    //resize view library
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+
 }

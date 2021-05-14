@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="purple">#BB86FC</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+
+    //dark theme
+    <color name="colorPrimary">#BB86FC</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorBackground">#2E2E2E</color>
+    <color name="colorBackgroundDark">#121212</color>
+    <color name="colorError">#CF6679</color>
+
+    //light theme
+    <color name="colorPrimaryLight">#6200EE</color>
+    <color name="colorErrorLight">#B00020</color>
 </resources>
