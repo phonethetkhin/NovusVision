@@ -1,6 +1,7 @@
 package com.ptkako.nv.novusvision.ui.activity
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -21,19 +22,19 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
-
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             requestPermission()
         } else {
-            loginIntent()
+            goToNextPage()
         }
 
     }
 
-    private fun loginIntent() {
+    private fun goToNextPage() {
         lifecycleScope.launch {
             delay(3000)
-            showToast("Go to login page")
+            startActivity(Intent(this@SplashActivity, AuthActivity::class.java))
+            finish()
         }
     }
 
@@ -43,7 +44,7 @@ class SplashActivity : AppCompatActivity() {
         if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
             checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
         ) {
-            loginIntent()
+            goToNextPage()
         } else {
             requestPermissions(
                 arrayOf(
@@ -61,7 +62,7 @@ class SplashActivity : AppCompatActivity() {
     ) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                loginIntent()
+                goToNextPage()
             } else {
                 showToast(getString(R.string.permission_denied))
             }

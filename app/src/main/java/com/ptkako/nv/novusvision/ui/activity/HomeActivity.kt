@@ -5,11 +5,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.tabs.TabLayout
 import com.ptkako.nv.novusvision.R
 import kotlinx.android.synthetic.main.activity_home.*
@@ -23,9 +19,8 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         tlbToolbar = findViewById(R.id.tlbToolbar)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setSupportActionBar(tlbToolbar)
-        supportActionBar!!.title = "Novus Vision"
+        supportActionBar!!.title = getString(R.string.app_name)
         settingDrawerToggle()
         tblHomeTab.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
@@ -72,11 +67,9 @@ class HomeActivity : AppCompatActivity() {
             toggle = ActionBarDrawerToggle(
                 this, drlHome, tlbToolbar, R.string.open, R.string.close
             )
-            toggle.drawerArrowDrawable.color = resources.getColor(R.color.white)
 
             drlHome.addDrawerListener(toggle)
             toggle.syncState()
-
         }
     }
 
