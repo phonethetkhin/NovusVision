@@ -8,21 +8,23 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.ptkako.nv.novusvision.R
-import kotlinx.android.synthetic.main.activity_home.*
+import com.ptkako.nv.novusvision.databinding.ActivityHomeBinding
 
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var tlbToolbar: Toolbar
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var binding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        binding = ActivityHomeBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         tlbToolbar = findViewById(R.id.tlbToolbar)
         setSupportActionBar(tlbToolbar)
         supportActionBar!!.title = getString(R.string.app_name)
         settingDrawerToggle()
-        tblHomeTab.addOnTabSelectedListener(
+        binding.tblHomeTab.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     tabSelected(tab!!)
@@ -56,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
         super.onBackPressed()
         val currentFragment = findNavController(R.id.nav_host_fragment).currentDestination?.id
         if (currentFragment == R.id.homeFragment) {
-            tblHomeTab.getTabAt(0)!!.select()
+            binding.tblHomeTab.getTabAt(0)!!.select()
         }
     }
 
@@ -65,10 +67,10 @@ class HomeActivity : AppCompatActivity() {
         if (supportActionBar != null) {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             toggle = ActionBarDrawerToggle(
-                this, drlHome, tlbToolbar, R.string.open, R.string.close
+                this, binding.drlHome, tlbToolbar, R.string.open, R.string.close
             )
 
-            drlHome.addDrawerListener(toggle)
+            binding.drlHome.addDrawerListener(toggle)
             toggle.syncState()
         }
     }

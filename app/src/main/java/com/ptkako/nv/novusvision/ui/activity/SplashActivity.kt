@@ -11,16 +11,21 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.common.PERMISSION_REQUEST_CODE
+import com.ptkako.nv.novusvision.databinding.ActivitySplashBinding
 import com.ptkako.nv.novusvision.utility.showToast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySplashBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
             requestPermission()
