@@ -4,7 +4,9 @@ import activityViewBinding
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ActivityHomeBinding
@@ -12,12 +14,15 @@ import com.ptkako.nv.novusvision.databinding.ActivityHomeBinding
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var navController: NavController
     private val binding by activityViewBinding(ActivityHomeBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include.tlbToolbar)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcvHomeNavHostFragment) as NavHostFragment
+        navController = navHostFragment.findNavController()
         supportActionBar!!.title = getString(R.string.app_name)
         settingDrawerToggle()
         binding.tblHome.addOnTabSelectedListener(
@@ -33,7 +38,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun tabSelected(tab: TabLayout.Tab) {
-        val navController = findNavController(R.id.fcvHomeNavHostFragment)
         when (tab.position) {
             0 -> {
                 navController.popBackStack(R.id.homeFragment, true)
@@ -52,9 +56,10 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val currentFragment = findNavController(R.id.fcvHomeNavHostFragment).currentDestination?.id
-        if (currentFragment == R.id.homeFragment) {
-            binding.tblHome.getTabAt(0)!!.select()
+        when (navController.currentDestination?.id) {
+            R.id.homeFragment -> {
+                binding.tblHome.getTabAt(0)!!.select()
+            }
         }
     }
 

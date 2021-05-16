@@ -22,5 +22,18 @@
     <string name="popular_movies">Popular Movies</string>
     <string name="new_movies">New Movies</string>
     <string name="all_movies">All Movies</string>
+    <string name="movie_cover_image">Movie Cover Image</string>
+    <string name="play_image">Play Image</string>
+    <string name="movie_photo_image">Movie Photo Image</string>
+    <string name="rating_star_image">Rating Star Image</string>
+    <string name="overview">OverView</string>
+    <string name="language">Language</string>
+    <string name="divider">:</string>
+    <string name="subtitle">Subtitle</string>
+    <string name="starring">Starring</string>
+    <string name="description">Description</string>
+    <string name="trailer">Trailer</string>
+    <string name="add_to_playlist">Add to Playlist</string>
+    <string name="download">Download</string>
 
 </resources>
