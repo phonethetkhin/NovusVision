@@ -1,7 +1,7 @@
 package com.ptkako.nv.novusvision.adapter
 
+import adapterViewBinding
 import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -31,17 +31,15 @@ class MoviesAdapter(private val context: Context) : ListAdapter<MoviesModel, Mov
         RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        binding = ListItemMoviesBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
-        )
+        binding = parent.adapterViewBinding(ListItemMoviesBinding::inflate)
         return MoviesViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movies = getItem(position)
 
-        Glide.with(context).load(movies.imgUrl).into(binding.ivMoviesImage)
-        binding.tvMoviesTitle.text = movies.moviesTitle
+        Glide.with(context).load(movies.imgUrl).into(binding.imgMoviesImage)
+        binding.txtMoviesTitle.text = movies.moviesTitle
     }
 
 }

@@ -1,25 +1,17 @@
 package com.ptkako.nv.novusvision.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentMovieBinding
 import com.ptkako.nv.novusvision.model.MoviesModel
+import fragmentViewBinding
 
-class MovieFragment : Fragment() {
+class MovieFragment : Fragment(R.layout.fragment_movie) {
     private lateinit var moviesAdapter: MoviesAdapter
-    private var _binding: FragmentMovieBinding? = null
-    private val binding: FragmentMovieBinding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentMovieBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
+    private val binding by fragmentViewBinding(FragmentMovieBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,25 +26,18 @@ class MovieFragment : Fragment() {
         moviesList.add(MoviesModel(5, R.drawable.warcraft, "Captain Marvel"))
 
         moviesAdapter.submitList(moviesList)
-
-        binding.rvPopularMovies.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
-
-        binding.rvNewMovies.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
-
-        binding.rvAllMovies.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
+        setBinding()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setBinding() = with(binding)
+    {
+        rcvPopularMovies.setHasFixedSize(true)
+        rcvPopularMovies.adapter = moviesAdapter
+
+        rcvNewMovies.setHasFixedSize(true)
+        rcvNewMovies.adapter = moviesAdapter
+
+        rcvAllMovies.setHasFixedSize(true)
+        rcvAllMovies.adapter = moviesAdapter
     }
 }

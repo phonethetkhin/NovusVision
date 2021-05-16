@@ -18,7 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar" />
+            <include
+                android:id="@+id/include"
+                layout="@layout/toolbar" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,7 +29,7 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tblHomeTab"
+                android:id="@+id/tblHome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +53,7 @@
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/nav_host_fragment"
+                android:id="@+id/fcvHomeNavHostFragment"
                 android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
@@ -59,13 +61,13 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tblHomeTab"
+                app:layout_constraintTop_toBottomOf="@+id/tblHome"
                 app:navGraph="@navigation/home_nav_graph" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/ngvView"
+        android:id="@+id/ngvHome"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"

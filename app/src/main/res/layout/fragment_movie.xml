@@ -11,29 +11,29 @@
         android:layout_height="0dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txtTrendingTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
             android:text="@string/popular_movies"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/ibPopularMovies"
+            app:layout_constraintEnd_toStartOf="@+id/imbPopularMovies"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/ibPopularMovies"
+            android:id="@+id/imbPopularMovies"
             android:layout_width="@dimen/_26sdp"
             android:layout_height="@dimen/_24sdp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="@+id/txtTrendingTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView" />
+            app:layout_constraintTop_toTopOf="@+id/txtTrendingTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvPopularMovies"
+            android:id="@+id/rcvPopularMovies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
@@ -41,32 +41,32 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/txtTrendingTitle" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/txtContinueWatchingTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
             android:text="@string/new_movies"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/ibNewMovies"
+            app:layout_constraintEnd_toStartOf="@+id/imbNewMovies"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvPopularMovies" />
+            app:layout_constraintTop_toBottomOf="@+id/rcvPopularMovies" />
 
         <ImageButton
-            android:id="@+id/ibNewMovies"
+            android:id="@+id/imbNewMovies"
             android:layout_width="@dimen/_26sdp"
             android:layout_height="@dimen/_24sdp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/textView2"
+            app:layout_constraintBottom_toBottomOf="@+id/txtContinueWatchingTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="@+id/txtContinueWatchingTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNewMovies"
+            android:id="@+id/rcvNewMovies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
@@ -74,32 +74,32 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toBottomOf="@+id/txtContinueWatchingTitle" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/txtNewMovie"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
             android:text="@string/all_movies"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/ibAllMovies"
+            app:layout_constraintEnd_toStartOf="@+id/imbAllMovies"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rvNewMovies" />
+            app:layout_constraintTop_toBottomOf="@+id/rcvNewMovies" />
 
         <ImageButton
-            android:id="@+id/ibAllMovies"
+            android:id="@+id/imbAllMovies"
             android:layout_width="@dimen/_26sdp"
             android:layout_height="@dimen/_24sdp"
             android:background="?attr/selectableItemBackground"
             android:contentDescription="@string/app_name"
             android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
+            app:layout_constraintBottom_toBottomOf="@+id/txtNewMovie"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+            app:layout_constraintTop_toTopOf="@+id/txtNewMovie" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAllMovies"
+            android:id="@+id/rcvAllMovies"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/_8sdp"
@@ -107,6 +107,6 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/txtNewMovie" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

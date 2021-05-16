@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieSignupEmail"
+                android:id="@+id/tetSignupEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -36,7 +36,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieSignupPassword"
+                android:id="@+id/tetSignupPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"
@@ -53,7 +53,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieSignupConfirmPassword"
+                android:id="@+id/tetSignupConfirmPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
@@ -72,7 +72,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tilSignupConfirmPassword">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieSignupQuestion"
+                android:id="@+id/tetSignupQuestion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
@@ -90,7 +90,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tilSignupQuestion">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieSignupAnswer"
+                android:id="@+id/tetSignupAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"

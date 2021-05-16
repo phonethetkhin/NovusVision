@@ -1,9 +1,7 @@
 package com.ptkako.nv.novusvision.persistence.dao
 
 import androidx.room.*
-import com.ptkako.nv.novusvision.persistence.entity.MovieEntity
 import com.ptkako.nv.novusvision.persistence.entity.SeriesEntity
-import com.ptkako.nv.novusvision.persistence.entity.UserEntity
 
 @Dao
 interface SeriesDao {

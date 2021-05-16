@@ -7,7 +7,7 @@
     tools:context=".ui.activity.SplashActivity">
 
     <ImageView
-        android:id="@+id/ivAppLogo"
+        android:id="@+id/imgAppLogo"
         android:layout_width="@dimen/_80sdp"
         android:layout_height="@dimen/_80sdp"
         android:contentDescription="@string/app_name"
@@ -17,24 +17,24 @@
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
     <TextView
-        android:id="@+id/tvAppName"
+        android:id="@+id/txtAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_name"
         android:textSize="@dimen/_20sdp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/ivAppLogo"
-        app:layout_constraintStart_toStartOf="@+id/ivAppLogo"
-        app:layout_constraintTop_toBottomOf="@+id/ivAppLogo" />
+        app:layout_constraintEnd_toEndOf="@+id/imgAppLogo"
+        app:layout_constraintStart_toStartOf="@+id/imgAppLogo"
+        app:layout_constraintTop_toBottomOf="@+id/imgAppLogo" />
 
     <ProgressBar
-        android:id="@+id/pbSplashScreen"
+        android:id="@+id/pgbSplashScreen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_16sdp"
-        app:layout_constraintEnd_toEndOf="@+id/tvAppName"
-        app:layout_constraintStart_toStartOf="@+id/tvAppName"
-        app:layout_constraintTop_toBottomOf="@+id/tvAppName" />
+        app:layout_constraintEnd_toEndOf="@+id/txtAppName"
+        app:layout_constraintStart_toStartOf="@+id/txtAppName"
+        app:layout_constraintTop_toBottomOf="@+id/txtAppName" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

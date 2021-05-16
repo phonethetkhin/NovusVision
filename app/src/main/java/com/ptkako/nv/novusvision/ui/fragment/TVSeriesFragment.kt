@@ -1,25 +1,17 @@
 package com.ptkako.nv.novusvision.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentTVSeriesBinding
 import com.ptkako.nv.novusvision.model.MoviesModel
+import fragmentViewBinding
 
-class TVSeriesFragment : Fragment() {
+class TVSeriesFragment : Fragment(R.layout.fragment_t_v_series) {
     private lateinit var moviesAdapter: MoviesAdapter
-    private var _binding: FragmentTVSeriesBinding? = null
-    private val binding: FragmentTVSeriesBinding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = FragmentTVSeriesBinding.inflate(inflater, container, false)
-
-        return binding.root
-    }
+    private val binding by fragmentViewBinding(FragmentTVSeriesBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,25 +26,18 @@ class TVSeriesFragment : Fragment() {
         moviesList.add(MoviesModel(5, R.drawable.warcraft, "Captain Marvel"))
 
         moviesAdapter.submitList(moviesList)
-
-        binding.rvPopularSeries.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
-
-        binding.rvNewSeries.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
-
-        binding.rvAllSeries.apply {
-            setHasFixedSize(true)
-            adapter = moviesAdapter
-        }
+        setBinding()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setBinding() = with(binding)
+    {
+        rcvPopularSeries.setHasFixedSize(true)
+        rcvPopularSeries.adapter = moviesAdapter
+
+        rcvNewSeries.setHasFixedSize(true)
+        rcvNewSeries.adapter = moviesAdapter
+
+        rcvAllSeries.setHasFixedSize(true)
+        rcvAllSeries.adapter = moviesAdapter
     }
 }

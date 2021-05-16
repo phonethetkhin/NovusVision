@@ -1,5 +1,6 @@
 package com.ptkako.nv.novusvision.ui.activity
 
+import activityViewBinding
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -17,11 +18,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
-    private lateinit var binding: ActivitySplashBinding
+    private val binding by activityViewBinding(ActivitySplashBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -37,7 +37,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun goToNextPage() {
         lifecycleScope.launch {
-            delay(3000)
+            delay(1000)
             startActivity(Intent(this@SplashActivity, AuthActivity::class.java))
             finish()
         }

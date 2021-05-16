@@ -1,14 +1,15 @@
 package com.ptkako.nv.novusvision.ui.activity
 
-import androidx.appcompat.app.AppCompatActivity
+import activityViewBinding
 import android.os.Bundle
-import com.ptkako.nv.novusvision.R
+import androidx.appcompat.app.AppCompatActivity
+import com.ptkako.nv.novusvision.databinding.ActivityAuthBinding
 
 class AuthActivity : AppCompatActivity() {
+    private val binding by activityViewBinding(ActivityAuthBinding::inflate)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_auth)
-
-
+        setContentView(binding.root)
     }
 }

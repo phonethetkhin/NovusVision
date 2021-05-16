@@ -1,21 +1,15 @@
 package com.ptkako.nv.novusvision.ui.fragment
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.FragmentSignupBinding
+import fragmentViewBinding
 
-class SignupFragment : Fragment() {
-    private var _binding: FragmentSignupBinding? = null
-    private val binding: FragmentSignupBinding get() = _binding!!
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentSignupBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+class SignupFragment : Fragment(R.layout.fragment_signup) {
+    private val binding by fragmentViewBinding(FragmentSignupBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,10 +18,4 @@ class SignupFragment : Fragment() {
             it.findNavController().popBackStack()
         }
     }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
 }

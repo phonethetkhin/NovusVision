@@ -12,7 +12,7 @@
         android:padding="@dimen/_16sdp">
 
         <ImageView
-            android:id="@+id/ivAppLogo"
+            android:id="@+id/imgAppLogo"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
             android:contentDescription="@string/app_name"
@@ -28,10 +28,10 @@
             android:layout_marginTop="@dimen/_32sdp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivAppLogo">
+            app:layout_constraintTop_toBottomOf="@+id/imgAppLogo">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieLoginEmail"
+                android:id="@+id/tetLoginEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
@@ -49,7 +49,7 @@
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/tieLoginPassword"
+                android:id="@+id/tetLoginPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/password"

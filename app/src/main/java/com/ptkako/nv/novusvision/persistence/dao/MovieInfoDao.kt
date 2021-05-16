@@ -2,7 +2,6 @@ package com.ptkako.nv.novusvision.persistence.dao
 
 import androidx.room.*
 import com.ptkako.nv.novusvision.persistence.entity.MovieInfoEntity
-import com.ptkako.nv.novusvision.persistence.entity.UserEntity
 
 @Dao
 interface MovieInfoDao {
