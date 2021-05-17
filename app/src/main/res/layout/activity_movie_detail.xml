@@ -13,7 +13,11 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/include2">
+        app:layout_constraintTop_toBottomOf="@+id/include2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -43,7 +47,7 @@
 
             <ImageView
                 android:id="@+id/imgMoviePhoto"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_100sdp"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_8sdp"
@@ -302,6 +306,53 @@
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnAddToPlaylist"
                 app:layout_constraintTop_toTopOf="@+id/btnAddToPlaylist" />
+
+            <TextView
+                android:id="@+id/txtSeasonTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:text="@string/season"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="@+id/txtOverViewTitle"
+                app:layout_constraintTop_toBottomOf="@+id/btnTrailer" />
+
+            <TextView
+                android:id="@+id/txtSeasonDivider"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:text="@string/divider"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintBottom_toBottomOf="@+id/txtSeasonTitle"
+                app:layout_constraintStart_toEndOf="@+id/txtSeasonTitle"
+                app:layout_constraintTop_toTopOf="@+id/txtSeasonTitle" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvSeasonNumber"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/txtSeasonDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/txtSeasonDivider"
+                app:layout_constraintTop_toTopOf="@+id/txtSeasonDivider" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvEpisode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/list_item_episode"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtSeasonTitle" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

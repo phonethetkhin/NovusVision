@@ -35,5 +35,7 @@
     <string name="trailer">Trailer</string>
     <string name="add_to_playlist">Add to Playlist</string>
     <string name="download">Download</string>
+    <string name="season">Season</string>
+    <string name="episode_photo_image">Episode Photo Image</string>
 
 </resources>

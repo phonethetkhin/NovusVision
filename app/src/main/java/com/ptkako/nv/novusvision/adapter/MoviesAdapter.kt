@@ -44,6 +44,7 @@ class MoviesAdapter(private val context: Context) : ListAdapter<MoviesModel, Mov
         binding.imgMoviesImage.setOnClickListener {
             context.startActivity(Intent(context, MovieDetailActivity::class.java))
         }
+
         binding.txtMoviesTitle.text = movies.moviesTitle
     }
 

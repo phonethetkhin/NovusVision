@@ -1,5 +1,6 @@
 package com.ptkako.nv.novusvision.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -7,6 +8,7 @@ import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
 import com.ptkako.nv.novusvision.model.MoviesModel
+import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import fragmentViewBinding
 
 
@@ -43,5 +45,10 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         rcvRecommended.setHasFixedSize(true)
         rcvRecommended.adapter = moviesAdapter
+
+        imbTrending.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+        imbContinueWatching.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+        imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+        imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
     }
 }
