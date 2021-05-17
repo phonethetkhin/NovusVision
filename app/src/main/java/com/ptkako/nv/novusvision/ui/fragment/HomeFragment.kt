@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
@@ -15,10 +18,12 @@ import fragmentViewBinding
 class HomeFragment : Fragment(R.layout.fragment_home) {
     private val binding by fragmentViewBinding(FragmentHomeBinding::bind)
     private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var db: FirebaseFirestore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         moviesAdapter = MoviesAdapter(requireContext())
+        db = Firebase.firestore
 
         val moviesList = ArrayList<MoviesModel>()
         moviesList.add(MoviesModel(1, R.drawable.captain_marvel, "Captain Marvel"))
@@ -51,4 +56,19 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
     }
+
+    /* private fun getFromFireStore(): MoviesModelFireStore? {
+         var movie: MoviesModelFireStore? = null
+         val docRef = db.collection("Movie").document("1")
+         docRef.get().addOnSuccessListener { documentSnapshot ->
+             //movie = documentSnapshot.toObject<MoviesModelFireStore>()
+             Log.d("doc", documentSnapshot.data!!.values.toString())
+         }
+             .addOnFailureListener { exception ->
+                 Log.d("doc", exception.message.toString())
+
+             }
+         return movie
+     }*/
+
 }
