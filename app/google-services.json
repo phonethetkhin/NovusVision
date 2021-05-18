@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "668659379449",
+    "project_id": "novus-vision",
+    "storage_bucket": "novus-vision.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:668659379449:android:f2216ab7a74020acbd4628",
+        "android_client_info": {
+          "package_name": "com.ptkako.nv.novusvision"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "668659379449-41ah16r89iu9ad9grtpre8sh8bmhl1d3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgI4MNkMu5VFcELhofoBLd6NoZb7wzf8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "668659379449-41ah16r89iu9ad9grtpre8sh8bmhl1d3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

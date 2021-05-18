@@ -1,4 +1,4 @@
 package com.ptkako.nv.novusvision.model
 
 
-data class MoviesModelFireStore(var movieInfoId: Int=0, var videoPath:String="")
+data class MoviesModelFireStore(var movie_info_id: Int = 0, var video_path: String = "")

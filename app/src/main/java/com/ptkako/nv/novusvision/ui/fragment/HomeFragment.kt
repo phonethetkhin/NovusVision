@@ -2,6 +2,7 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,6 +12,7 @@ import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
 import com.ptkako.nv.novusvision.model.MoviesModel
+import com.ptkako.nv.novusvision.model.MoviesModelFireStore
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import fragmentViewBinding
 
@@ -57,7 +59,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
     }
 
-    /* private fun getFromFireStore(): MoviesModelFireStore? {
+     private fun getFromFireStore(): MoviesModelFireStore? {
          var movie: MoviesModelFireStore? = null
          val docRef = db.collection("Movie").document("1")
          docRef.get().addOnSuccessListener { documentSnapshot ->
@@ -69,6 +71,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
              }
          return movie
-     }*/
+     }
 
 }
