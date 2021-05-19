@@ -15,6 +15,7 @@
             android:id="@+id/tilSignupEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:errorIconDrawable="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -31,6 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
+            app:errorIconDrawable="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilSignupEmail"
             app:passwordToggleEnabled="true">
@@ -48,6 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
+            app:errorIconDrawable="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilSignupPassword"
             app:passwordToggleEnabled="true">
@@ -67,6 +70,7 @@
             android:layout_marginTop="@dimen/_16sdp"
             app:endIconDrawable="@drawable/ic_arrow_drop"
             app:endIconMode="custom"
+            app:errorIconDrawable="@null"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilSignupConfirmPassword">
@@ -86,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_16sdp"
+            app:errorIconDrawable="@null"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tilSignupQuestion">
 
@@ -93,7 +98,7 @@
                 android:id="@+id/tetSignupAnswer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/email"
+                android:hint="@string/answer"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 

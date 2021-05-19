@@ -36,5 +36,7 @@
     <string name="download">Download</string>
     <string name="season">Season</string>
     <string name="episode_photo_image">Episode Photo Image</string>
+    <string name="answer">Answer</string>
+    <string name="please_wait">Please wait…</string>
 
 </resources>

@@ -87,7 +87,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
 
     //Kodein
-    implementation "org.kodein.di:kodein-di-framework-android-x:7.4.0"
+    implementation "org.kodein.di:kodein-di-framework-android-x:7.5.0"
 
 
 }
