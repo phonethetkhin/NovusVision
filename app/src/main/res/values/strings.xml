@@ -36,7 +36,20 @@
     <string name="download">Download</string>
     <string name="season">Season</string>
     <string name="episode_photo_image">Episode Photo Image</string>
-    <string name="answer">Answer</string>
+    <string name="security_answer">Security answer</string>
     <string name="please_wait">Please wait…</string>
+    <string name="enter_email">Please enter email.</string>
+    <string name="enter_password">Please enter password.</string>
+    <string name="confirm_your_password">Please confirm your password.</string>
+    <string name="enter_security_answer">Please enter your security answer.</string>
+    <string name="check_connection">Please check your internet connection.</string>
+
+    <string-array name="security_question">
+        <item>What is your sister name?</item>
+        <item>What is your sister favourite food?</item>
+        <item>What is your best friend name?</item>
+        <item>What is your girl friend name?</item>
+        <item>What is your younger sister name?</item>
+    </string-array>
 
 </resources>
