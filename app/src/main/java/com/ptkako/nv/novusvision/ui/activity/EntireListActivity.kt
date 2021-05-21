@@ -17,12 +17,12 @@ class EntireListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        movieAdapter = MoviesAdapter(this)
+        //movieAdapter = MoviesAdapter(this)
         setSupportActionBar(binding.include3.tlbToolbar)
         supportActionBar!!.title = "Recommended"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        val moviesList = ArrayList<MoviesModel>()
+       /* val moviesList = ArrayList<MoviesModel>()
         moviesList.add(MoviesModel(1, R.drawable.captain_marvel, "Captain Marvel"))
         moviesList.add(MoviesModel(2, R.drawable.game_of_throne, "Captain Marvel"))
         moviesList.add(MoviesModel(3, R.drawable.spiderman, "Captain Marvel"))
@@ -35,7 +35,7 @@ class EntireListActivity : AppCompatActivity() {
         moviesList.add(MoviesModel(9, R.drawable.superman, "Captain Marvel"))
         moviesList.add(MoviesModel(10, R.drawable.warcraft, "Captain Marvel"))
 
-        movieAdapter.submitList(moviesList)
+        movieAdapter.submitList(moviesList)*/
         setBinding()
     }
 

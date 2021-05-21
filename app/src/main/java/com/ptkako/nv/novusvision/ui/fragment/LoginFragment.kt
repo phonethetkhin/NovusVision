@@ -24,7 +24,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding.btnLogin.setOnClickListener {
             //sample data
             val email = "snowcat018@gmail.com"
-            val password = "abcdefg"
+            val password = "abcdefgh"
             userLogin(email, password)
         }
 

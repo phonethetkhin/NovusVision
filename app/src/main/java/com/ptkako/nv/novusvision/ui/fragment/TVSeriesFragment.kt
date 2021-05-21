@@ -18,16 +18,16 @@ class TVSeriesFragment : Fragment(R.layout.fragment_t_v_series) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        moviesAdapter = MoviesAdapter(requireContext())
+       // moviesAdapter = MoviesAdapter(requireContext())
 
-        val moviesList = ArrayList<MoviesModel>()
+        /*val moviesList = ArrayList<MoviesModel>()
         moviesList.add(MoviesModel(1, R.drawable.captain_marvel, "Captain Marvel"))
         moviesList.add(MoviesModel(2, R.drawable.game_of_throne, "Captain Marvel"))
         moviesList.add(MoviesModel(3, R.drawable.spiderman, "Captain Marvel"))
         moviesList.add(MoviesModel(4, R.drawable.superman, "Captain Marvel"))
         moviesList.add(MoviesModel(5, R.drawable.warcraft, "Captain Marvel"))
 
-        moviesAdapter.submitList(moviesList)
+        moviesAdapter.submitList(moviesList)*/
         setBinding()
     }
 

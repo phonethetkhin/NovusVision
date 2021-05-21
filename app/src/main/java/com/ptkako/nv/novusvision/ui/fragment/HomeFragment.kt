@@ -2,7 +2,6 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,22 +10,27 @@ import com.google.firebase.ktx.Firebase
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
-import com.ptkako.nv.novusvision.model.MoviesModel
-import com.ptkako.nv.novusvision.model.MoviesModelFireStore
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
+import com.ptkako.nv.novusvision.utility.kodeinViewModel
+import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
 import fragmentViewBinding
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.closestDI
 
 
-class HomeFragment : Fragment(R.layout.fragment_home) {
+class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
+    override val di: DI by closestDI()
+    private val homeViewModel: HomeViewModel by kodeinViewModel()
     private val binding by fragmentViewBinding(FragmentHomeBinding::bind)
     private lateinit var moviesAdapter: MoviesAdapter
     private lateinit var db: FirebaseFirestore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moviesAdapter = MoviesAdapter(requireContext())
+        moviesAdapter = MoviesAdapter(requireActivity(), di, homeViewModel)
         db = Firebase.firestore
-
+/*
         val moviesList = ArrayList<MoviesModel>()
         moviesList.add(MoviesModel(1, R.drawable.captain_marvel, "Captain Marvel"))
         moviesList.add(MoviesModel(2, R.drawable.game_of_throne, "Captain Marvel"))
@@ -34,7 +38,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         moviesList.add(MoviesModel(4, R.drawable.superman, "Captain Marvel"))
         moviesList.add(MoviesModel(5, R.drawable.warcraft, "Captain Marvel"))
 
-        moviesAdapter.submitList(moviesList)
+        moviesAdapter.submitList(moviesList)*/
         setBinding()
 
     }
@@ -59,18 +63,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
     }
 
-     private fun getFromFireStore(): MoviesModelFireStore? {
-         var movie: MoviesModelFireStore? = null
-         val docRef = db.collection("Movie").document("1")
-         docRef.get().addOnSuccessListener { documentSnapshot ->
-             //movie = documentSnapshot.toObject<MoviesModelFireStore>()
-             Log.d("doc", documentSnapshot.data!!.values.toString())
-         }
-             .addOnFailureListener { exception ->
-                 Log.d("doc", exception.message.toString())
-
-             }
-         return movie
-     }
 
 }
