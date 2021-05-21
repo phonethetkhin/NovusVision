@@ -1,9 +1,6 @@
 package com.ptkako.nv.novusvision.utility
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
+import android.util.Patterns
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,3 +16,5 @@ fun runOnIO(work: suspend () -> Unit) {
         work()
     }
 }
+
+fun isEmailDataInvalid(email: String) = !Patterns.EMAIL_ADDRESS.matcher(email).matches()

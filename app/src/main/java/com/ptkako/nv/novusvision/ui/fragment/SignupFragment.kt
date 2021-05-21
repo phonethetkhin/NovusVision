@@ -2,16 +2,15 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.google.firebase.auth.FirebaseUser
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.common.PROGRESS_DIALOG_TAB
 import com.ptkako.nv.novusvision.databinding.FragmentSignupBinding
 import com.ptkako.nv.novusvision.dialog.ProgressDialogFragment
+import com.ptkako.nv.novusvision.utility.isEmailDataInvalid
 import com.ptkako.nv.novusvision.utility.isInternetAvailable
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.utility.showToast
@@ -33,6 +32,24 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
         super.onViewCreated(view, savedInstanceState)
         retainInstance = true
         setBinding()
+
+        viewModel.registerUserLiveData.observe(viewLifecycleOwner, Observer {
+            if (::progressDialog.isInitialized && it != null) {
+                progressDialog.dismiss()
+            }
+            when (it) {
+
+                is String -> {
+                    requireActivity().showToast("Sign up successfully.")
+                    viewModel.registerUserLiveData.postValue(null)
+                }
+
+                is Exception -> {
+                    requireActivity().showToast(it.localizedMessage)
+                    viewModel.registerUserLiveData.postValue(null)
+                }
+            }
+        })
     }
 
     private fun setBinding() = with(binding) {
@@ -41,7 +58,6 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
 
         btnSignupLogin.setOnClickListener {
             it.findNavController().popBackStack()
-
         }
 
         btnSignup.setOnClickListener {
@@ -68,30 +84,31 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
 
     private fun registerUser() {
         if (isEmailInValid() or isPasswordInValid()
-            or isConFirmPasswordInvalid() or isSignupAnswerInvalid()
+            or isConfirmPasswordInvalid() or isSignupAnswerInvalid()
         ) {
             return
         } else {
             if (requireActivity().isInternetAvailable()) {
 
+                val email = binding.tetSignupEmail.text.toString().trim()
+                val password = binding.tetSignupPassword.text.toString().trim()
+                val recoveryQuestion = binding.tetSignupQuestion.text.toString().trim()
+                val recoveryAnswer = binding.tetSignupAnswer.text.toString().trim()
+                val vipPlan = 0
+
+                val user = hashMapOf(
+                    "email" to email,
+                    "password" to password,
+                    "recovery_question" to recoveryQuestion,
+                    "recover_answer" to recoveryAnswer,
+                    "vip_plan" to vipPlan.toString()
+                )
+
                 progressDialog = ProgressDialogFragment(getString(R.string.sign_up), getString(R.string.please_wait))
                 progressDialog.show(requireActivity().supportFragmentManager, PROGRESS_DIALOG_TAB)
                 progressDialog.isCancelable = false
 
-                viewModel.registerUser(binding.tetSignupEmail.text.toString().trim(), binding.tetSignupPassword.text.toString().trim())
-                    .observe(viewLifecycleOwner, Observer {
-                        when (it) {
-
-                            is FirebaseUser -> {
-                                sendEmailVerification(it, progressDialog)
-                            }
-
-                            is Exception -> {
-                                progressDialog.dismiss()
-                                requireActivity().showToast(it.localizedMessage)
-                            }
-                        }
-                    })
+                viewModel.registerUser(user)
 
             } else {
                 requireActivity().showToast(getString(R.string.check_connection))
@@ -99,84 +116,61 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
         }
     }
 
-    private fun sendEmailVerification(currentUser: FirebaseUser, progressDialog: ProgressDialogFragment) {
-
-        viewModel.sendEmailVerification(currentUser).observe(viewLifecycleOwner, Observer {
-            when (it) {
-                is String -> {
-                    uploadUserData(currentUser.uid, progressDialog)
-                    Log.d("email verification", "Send email verification is successfully.")
-                }
-
-                is Exception -> {
-                    progressDialog.dismiss()
-                    requireActivity().showToast(it.localizedMessage)
-                }
-            }
-        })
-    }
-
-    private fun uploadUserData(userId: String, progressDialog: ProgressDialogFragment) {
-        val email = binding.tetSignupEmail.text.toString().trim()
-        val password = binding.tetSignupPassword.text.toString().trim()
-        val recoveryQuestion = binding.tetSignupQuestion.text.toString().trim()
-        val recoveryAnswer = binding.tetSignupAnswer.text.toString().trim()
-        val vipPlan = 0
-
-        val user = hashMapOf(
-            "user_id" to userId,
-            "email" to email,
-            "password" to password,
-            "recovery_question" to recoveryQuestion,
-            "recover_answer" to recoveryAnswer,
-            "vip_plan" to vipPlan
-        )
-
-        viewModel.uploadUserData(user).observe(viewLifecycleOwner, Observer {
-            progressDialog.dismiss()
-            when (it) {
-                is String -> {
-                    requireActivity().showToast("Success upload!")
-                }
-
-                is Exception -> {
-                    requireActivity().showToast(it.localizedMessage)
-                }
-            }
-        })
-    }
-
-
     private fun isEmailInValid(): Boolean {
-        return if (binding.tetSignupEmail.text.toString().trim().isEmpty()) {
-            binding.tilSignupEmail.isErrorEnabled = true
-            binding.tilSignupEmail.error = getString(R.string.enter_email)
-            true
-        } else {
-            binding.tilSignupEmail.isErrorEnabled = false
-            false
+        return when {
+            binding.tetSignupEmail.text.toString().trim().isEmpty() -> {
+                binding.tilSignupEmail.isErrorEnabled = true
+                binding.tilSignupEmail.error = getString(R.string.enter_email)
+                true
+            }
+            isEmailDataInvalid(binding.tetSignupEmail.text.toString().trim()) -> {
+                binding.tilSignupEmail.isErrorEnabled = true
+                binding.tilSignupEmail.error = getString(R.string.email_invalid)
+                true
+            }
+            else -> {
+                binding.tilSignupEmail.isErrorEnabled = false
+                false
+            }
         }
     }
 
     private fun isPasswordInValid(): Boolean {
-        return if (binding.tetSignupPassword.text.toString().trim().isEmpty()) {
-            binding.tilSignupPassword.isErrorEnabled = true
-            binding.tilSignupPassword.error = getString(R.string.enter_password)
-            true
-        } else {
-            binding.tilSignupPassword.isErrorEnabled = false
-            false
+        return when {
+            binding.tetSignupPassword.text.toString().trim().isEmpty() -> {
+                binding.tilSignupPassword.isErrorEnabled = true
+                binding.tilSignupPassword.error = getString(R.string.enter_password)
+                true
+            }
+            binding.tetSignupPassword.text.toString().trim().length <= 6 -> {
+                binding.tilSignupPassword.isErrorEnabled = true
+                binding.tilSignupPassword.error = getString(R.string.short_password)
+                true
+            }
+            else -> {
+                binding.tilSignupPassword.isErrorEnabled = false
+                false
+            }
         }
     }
 
-    private fun isConFirmPasswordInvalid(): Boolean {
-        return if (binding.tetSignupConfirmPassword.text.toString().trim().isEmpty()) {
-            binding.tilSignupConfirmPassword.isErrorEnabled = true
-            binding.tilSignupConfirmPassword.error = getString(R.string.confirm_your_password)
-            true
-        } else {
-            binding.tilSignupConfirmPassword.isErrorEnabled = false
-            false
+    private fun isConfirmPasswordInvalid(): Boolean {
+        return when {
+            binding.tetSignupConfirmPassword.text.toString().trim().isEmpty() -> {
+                binding.tilSignupConfirmPassword.isErrorEnabled = true
+                binding.tilSignupConfirmPassword.error = getString(R.string.confirm_your_password)
+                true
+            }
+            binding.tetSignupConfirmPassword.text.toString().trim() !=
+                    binding.tetSignupPassword.text.toString().trim() -> {
+                binding.tilSignupConfirmPassword.isErrorEnabled = true
+                binding.tilSignupConfirmPassword.error = getString(R.string.password_not_match)
+                true
+            }
+            else -> {
+                binding.tilSignupConfirmPassword.isErrorEnabled = false
+                false
+            }
         }
     }
 
