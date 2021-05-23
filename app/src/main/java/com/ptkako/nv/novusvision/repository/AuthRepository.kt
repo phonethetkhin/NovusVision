@@ -27,7 +27,7 @@ class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: 
         }
     }
 
-    private fun sendEmailVerification(currentUser: FirebaseUser, user: HashMap<String, out Any>) {
+    private fun sendEmailVerification(currentUser: FirebaseUser, user: HashMap<String, String>) {
 
         currentUser.sendEmailVerification().addOnCompleteListener {
             if (it.isSuccessful)
@@ -37,7 +37,7 @@ class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: 
         }
     }
 
-    private fun uploadUserData(user: HashMap<String, out Any>) {
+    private fun uploadUserData(user: HashMap<String, String>) {
 
         fireStore.collection("User")
             .add(user)

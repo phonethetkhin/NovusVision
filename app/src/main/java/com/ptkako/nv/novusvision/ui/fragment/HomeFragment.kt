@@ -28,7 +28,7 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moviesAdapter = MoviesAdapter(requireActivity(), di, homeViewModel)
+        moviesAdapter = MoviesAdapter(this)
         db = Firebase.firestore
 /*
         val moviesList = ArrayList<MoviesModel>()

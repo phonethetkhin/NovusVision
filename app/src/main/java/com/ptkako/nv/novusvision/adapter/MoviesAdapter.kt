@@ -2,10 +2,10 @@ package com.ptkako.nv.novusvision.adapter
 
 import adapterViewBinding
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,18 +15,10 @@ import com.ptkako.nv.novusvision.model.ContentModel
 import com.ptkako.nv.novusvision.model.MovieInfoModel
 import com.ptkako.nv.novusvision.model.MoviesModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
-import com.ptkako.nv.novusvision.utility.showToast
-import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import org.kodein.di.DI
-import org.kodein.di.DIAware
+import com.ptkako.nv.novusvision.ui.fragment.MovieFragment
 
-class MoviesAdapter(private val app: FragmentActivity, override val di: DI, private val homeViewModel: HomeViewModel) : ListAdapter<MoviesModel, MoviesAdapter.MoviesViewHolder>(diffCallback), DIAware {
+class MoviesAdapter(private val fragment: Fragment) : ListAdapter<MoviesModel, MoviesAdapter.MoviesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
-    lateinit var movieInfoModel: MovieInfoModel
-    lateinit var contentModel: ContentModel
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<MoviesModel>() {
@@ -51,49 +43,23 @@ class MoviesAdapter(private val app: FragmentActivity, override val di: DI, priv
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movies = getItem(position)
-        CoroutineScope(Dispatchers.Main).launch {
-            getMovieInfo(movies.movie_info_id)
-        }
+        /* val movieInfo = (fragment as MovieFragment).observeMovieInfo(movies.movie_info_id)
+        Log.d("data", movieInfo.toString())
+        if (movieInfo != null) {
+            movieInfo as MovieInfoModel
+            val content = (fragment as MovieFragment).observeContent(movieInfo.content_id)
+            Log.d("data", content.toString())
+
+            if (content != null) {
+                setData(movieInfo, content)
+            }*/
     }
 
-    private suspend fun getMovieInfo(movieInfoId: Int) {
-        homeViewModel.getMovieInfo(movieInfoId)
-        homeViewModel.movieInfoLiveData.observe(app, Observer {
-            when (it) {
-                is Exception -> {
-                    app.showToast(it.localizedMessage)
-                }
-                else -> {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        movieInfoModel = it as MovieInfoModel
-                        getContent()
-                    }
-                }
-            }
-        })
-    }
-
-    private suspend fun getContent() {
-        homeViewModel.getContent(movieInfoModel.content_id)
-        homeViewModel.contentLiveData.observe(app, Observer {
-            when (it) {
-                is Exception -> {
-                    app.showToast(it.localizedMessage)
-                }
-                else -> {
-                    contentModel = it as ContentModel
-                    setData()
-                }
-
-            }
-        })
-    }
-
-    private fun setData() {
-        Glide.with(app).load(contentModel.image_path).into(binding.imgMoviesImage)
+   /* private fun setData(movieInfoModel: MovieInfoModel, contentModel: ContentModel) {
+        Glide.with(fragment.requireContext()).load(contentModel.image_path).into(binding.imgMoviesImage)
         binding.imgMoviesImage.setOnClickListener {
-            app.startActivity(Intent(app, MovieDetailActivity::class.java))
+            fragment.requireContext().startActivity(Intent(fragment.requireContext(), MovieDetailActivity::class.java))
         }
         binding.txtMoviesTitle.text = movieInfoModel.movie_name
-    }
+    }*/
 }
