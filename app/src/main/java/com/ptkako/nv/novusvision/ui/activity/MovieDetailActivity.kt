@@ -4,11 +4,13 @@ import activityViewBinding
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivityMovieDetailBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
+import com.ptkako.nv.novusvision.model.MovieModel
 
 class MovieDetailActivity : AppCompatActivity() {
     private val binding by activityViewBinding(ActivityMovieDetailBinding::inflate)
@@ -19,10 +21,13 @@ class MovieDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include2.tlbToolbar)
-        supportActionBar!!.title = "Game of Thrones"
+        val bundle = intent.getParcelableExtra<MovieModel>("movie")!!
+
+        supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         episodeAdapter = EpisodeAdapter(this)
         numberAdapter = NumberAdapter(this)
+        setBinding(bundle)
 
 
         val episodeList = ArrayList<EpisodeModel>()
@@ -42,11 +47,25 @@ class MovieDetailActivity : AppCompatActivity() {
 
         numberAdapter.submitList(numberList)
         episodeAdapter.submitList(episodeList)
-        setBinding()
     }
 
-    fun setBinding() = with(binding)
+    private fun setBinding(bundle: MovieModel) = with(binding)
     {
+        Glide.with(this@MovieDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
+        Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
+        txtMoviesTitle.text = bundle.movie_name
+        //txtContentRating.text = bundle.cotent_rating
+        txtGenre.text = bundle.genres
+        txtCountry.text = bundle.country
+        //txtProductionYear.text = bundle.production_year
+        txtDuration.text = bundle.duration
+        txtRating.text = bundle.popularity
+        txtLanguage.text = bundle.language
+        txtSubtitle.text = bundle.subtitle
+        txtStarring.text = bundle.casts
+        txtDescription.text = bundle.overview
+
+
         rcvSeasonNumber.setHasFixedSize(true)
         rcvSeasonNumber.adapter = numberAdapter
 

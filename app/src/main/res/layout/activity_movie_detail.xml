@@ -292,7 +292,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/btnDownload"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/btnTrailer"
-
                 app:layout_constraintTop_toTopOf="@+id/btnTrailer" />
 
             <Button

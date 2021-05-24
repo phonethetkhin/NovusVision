@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.ActivityEntireListBinding
-import com.ptkako.nv.novusvision.model.MoviesModel
 
 class EntireListActivity : AppCompatActivity() {
     private val binding by activityViewBinding(ActivityEntireListBinding::inflate)
