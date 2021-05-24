@@ -2,11 +2,9 @@ package com.ptkako.nv.novusvision.repository
 
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.utility.runOnIO
 import com.ptkako.nv.novusvision.utility.runOnMain
-import kotlinx.coroutines.delay
 
 class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: FirebaseFirestore) {
     val registerUserLiveData = MutableLiveData<Any>()
@@ -17,7 +15,7 @@ class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: 
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         user["user_id"] = fireAuth.currentUser!!.uid
-                        sendEmailVerification(fireAuth.currentUser!!, user)
+                        sendEmailVerification(user)
                     } else {
                         runOnMain {
                             registerUserLiveData.postValue(it.exception)
@@ -27,11 +25,14 @@ class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: 
         }
     }
 
-    private fun sendEmailVerification(currentUser: FirebaseUser, user: HashMap<String, String>) {
+    private fun sendEmailVerification(user: HashMap<String, String>? = null) {
 
-        currentUser.sendEmailVerification().addOnCompleteListener {
+        fireAuth.currentUser!!.sendEmailVerification().addOnCompleteListener {
             if (it.isSuccessful)
-                uploadUserData(user)
+                if (user != null)
+                    uploadUserData(user)
+                else
+                    registerUserLiveData.postValue("Success resend email")
             else
                 runOnMain { registerUserLiveData.postValue(it.exception) }
         }

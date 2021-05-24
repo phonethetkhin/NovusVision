@@ -55,4 +55,8 @@
         <item>What is your younger sister name?</item>
     </string-array>
 
+    <string name="verify_your_email">Verify your email</string>
+    <string name="send_email_message">We have send you a confirmation message to your email. Click confirm link in your email to verify.</string>
+    <string name="did_not_receive_confirm_message">Didn\'t receive confirmation message?</string>
+
 </resources>
