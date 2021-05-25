@@ -23,6 +23,7 @@ import org.kodein.di.android.x.closestDI
 class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
     override val di: DI by closestDI()
     private val binding by fragmentViewBinding(FragmentSignupBinding::bind)
+
     private val viewModel: AuthViewModel by kodeinViewModel()
     private lateinit var progressDialog: ProgressDialogFragment
     private var selectedQuestion = 0
@@ -41,6 +42,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
 
                 is String -> {
                     requireActivity().showToast("Sign up successfully.")
+                    binding.root.findNavController().navigate(R.id.action_signupFragment_to_verifyEmailFragment)
                     viewModel.registerUserLiveData.postValue(null)
                 }
 

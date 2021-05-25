@@ -18,3 +18,6 @@ fun runOnIO(work: suspend () -> Unit) {
 }
 
 fun isEmailDataInvalid(email: String) = !Patterns.EMAIL_ADDRESS.matcher(email).matches()
+
+fun convertMMSSFormat(second: Long) =
+    String.format("%02d:%02d", (second % 3600) / 60, (second % 60))
