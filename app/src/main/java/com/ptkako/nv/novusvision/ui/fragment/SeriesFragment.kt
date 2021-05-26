@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.SeriesAdapter
-import com.ptkako.nv.novusvision.databinding.FragmentTVSeriesBinding
+import com.ptkako.nv.novusvision.databinding.FragmentSeriesBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
@@ -16,24 +16,18 @@ import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
 
-class TVSeriesFragment : Fragment(R.layout.fragment_t_v_series), DIAware {
+class SeriesFragment : Fragment(R.layout.fragment_series), DIAware {
     override val di: DI by closestDI()
     private val homeViewModel: HomeViewModel by kodeinViewModel()
     private lateinit var seriesAdapter: SeriesAdapter
-    private val binding by fragmentViewBinding(FragmentTVSeriesBinding::bind)
+    private val binding by fragmentViewBinding(FragmentSeriesBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         seriesAdapter = SeriesAdapter(requireContext())
-        setBinding()
-
-    }
-
-    override fun onResume() {
-        super.onResume()
         homeViewModel.getSeriesListLiveData().observe(viewLifecycleOwner, Observer {
             seriesAdapter.submitList(it)
+            setBinding()
         })
     }
 

@@ -12,9 +12,9 @@
         tools:layout="@layout/fragment_home"/>
     <fragment
         android:id="@+id/tvSeriesFragment"
-        android:name="com.ptkako.nv.novusvision.ui.fragment.TVSeriesFragment"
+        android:name="com.ptkako.nv.novusvision.ui.fragment.SeriesFragment"
         android:label="fragment_t_v_series"
-        tools:layout="@layout/fragment_t_v_series" />
+        tools:layout="@layout/fragment_series" />
     <fragment
         android:id="@+id/movieFragment"
         android:name="com.ptkako.nv.novusvision.ui.fragment.MovieFragment"

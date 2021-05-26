@@ -4,7 +4,6 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -26,17 +25,10 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
     private val binding by fragmentViewBinding(FragmentMovieBinding::bind)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("lifecycle", "onViewCreated")
-
         moviesAdapter = MoviesAdapter(requireContext())
-        setBinding()
-    }
-
-    override fun onResume() {
-        super.onResume()
         homeViewModel.getMovieListLiveData().observe(viewLifecycleOwner, Observer {
             moviesAdapter.submitList(it)
-
+            setBinding()
         })
     }
 

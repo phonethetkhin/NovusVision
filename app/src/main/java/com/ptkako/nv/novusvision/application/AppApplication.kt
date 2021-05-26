@@ -22,7 +22,7 @@ class AppApplication : Application(), DIAware {
         bindSingleton { ViewModelFactory(di.direct) }
 
         bindSingleton { AuthRepository(instance(), instance()) }
-        bindSingleton { HomeRepository(instance())}
+        bindSingleton { HomeRepository(instance(), instance()) }
 
         bind<AuthViewModel>(AuthViewModel::class.java.simpleName) with provider { AuthViewModel(instance()) }
         bind<HomeViewModel>(HomeViewModel::class.java.simpleName) with provider { HomeViewModel(instance()) }

@@ -18,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NovusVision">
+        <activity android:name=".ui.activity.VideoStreamingActivity"/>
         <activity android:name=".ui.activity.EntireListActivity" />
         <activity android:name=".ui.activity.MovieDetailActivity" />
         <activity android:name=".ui.activity.SeriesDetailActivity" />
