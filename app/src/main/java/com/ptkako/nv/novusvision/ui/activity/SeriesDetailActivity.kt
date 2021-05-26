@@ -11,20 +11,20 @@ import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
-import com.ptkako.nv.novusvision.databinding.ActivityMovieDetailBinding
+import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
-import com.ptkako.nv.novusvision.model.MovieModel
+import com.ptkako.nv.novusvision.model.SeriesModel
 
-class MovieDetailActivity : AppCompatActivity() {
-    private val binding by activityViewBinding(ActivityMovieDetailBinding::inflate)
+class SeriesDetailActivity : AppCompatActivity() {
+    private val binding by activityViewBinding(ActivitySeriesDetailBinding::inflate)
     private lateinit var episodeAdapter: EpisodeAdapter
     private lateinit var numberAdapter: NumberAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        setSupportActionBar(binding.include2.tlbToolbar)
-        val bundle = intent.getParcelableExtra<MovieModel>("movie")!!
+        setSupportActionBar(binding.include3.tlbToolbar)
+        val bundle = intent.getParcelableExtra<SeriesModel>("series")!!
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -52,10 +52,10 @@ class MovieDetailActivity : AppCompatActivity() {
         episodeAdapter.submitList(episodeList)
     }
 
-    private fun setBinding(bundle: MovieModel) = with(binding)
+    private fun setBinding(bundle: SeriesModel) = with(binding)
     {
-        Glide.with(this@MovieDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
-        Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
+        Glide.with(this@SeriesDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
+        Glide.with(this@SeriesDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
         txtMoviesTitle.text = bundle.movie_name
         txtContentRating.text = bundle.content_rating
         txtGenre.text = bundle.genres
@@ -67,6 +67,13 @@ class MovieDetailActivity : AppCompatActivity() {
         txtSubtitle.text = bundle.subtitle
         txtStarring.text = bundle.casts
         txtDescription.text = bundle.overview
+
+
+        rcvSeasonNumber.setHasFixedSize(true)
+        rcvSeasonNumber.adapter = numberAdapter
+
+        rcvEpisode.setHasFixedSize(true)
+        rcvEpisode.adapter = episodeAdapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

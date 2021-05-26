@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
+import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
 class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesAdapter.SeriesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
@@ -46,7 +47,7 @@ class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, Ser
     private fun setData(series: SeriesModel) {
         Glide.with(context).load(series.movie_photo).into(binding.imgMoviesImage)
         binding.imgMoviesImage.setOnClickListener {
-            val i = Intent(context, MovieDetailActivity::class.java)
+            val i = Intent(context, SeriesDetailActivity::class.java)
             val b = Bundle()
             b.putParcelable("series", series)
             i.putExtras(b)
