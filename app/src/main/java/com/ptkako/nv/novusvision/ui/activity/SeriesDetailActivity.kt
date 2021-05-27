@@ -4,6 +4,7 @@ package com.ptkako.nv.novusvision.ui.activity
 
 import activityViewBinding
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -56,6 +57,17 @@ class SeriesDetailActivity : AppCompatActivity() {
     {
         Glide.with(this@SeriesDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
         Glide.with(this@SeriesDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
+        imgMovieCover.setOnClickListener {
+            val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
+            intent.putExtra("videopath", bundle.trailer_video_path)
+            startActivity(intent)
+        }
+
+        btnTrailer.setOnClickListener {
+            val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
+            intent.putExtra("videopath", bundle.trailer_video_path)
+            startActivity(intent)
+        }
         txtMoviesTitle.text = bundle.movie_name
         txtContentRating.text = bundle.content_rating
         txtGenre.text = bundle.genres
