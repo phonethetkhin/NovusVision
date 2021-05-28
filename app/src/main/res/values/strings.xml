@@ -58,9 +58,14 @@
     <string name="verify_your_email">Verify your email</string>
     <string name="send_email_message">We have sent you a confirmation message to your email. Click confirm link in your email to verify.</string>
     <string name="did_not_receive_confirm_message">Didn\'t receive confirmation message?</string>
-    <string name="resent_mail">Resent(%s)</string>
+    <string name="resent_mail">Resent%s</string>
 
     <string name="media_url_mp4">https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
     <string name="media_url_dash"><![CDATA[https://www.youtube.com/api/manifest/dash/id/bf5bb2419360daf1/source/youtube?as=fmp4_audio_clear,fmp4_sd_hd_clear&sparams=ip,ipbits,expire,source,id,as&ip=0.0.0.0&ipbits=0&expire=19000000000&signature=51AF5F39AB0CEC3E5497CD9C900EBFEAECCCB5C7.8506521BFC350652163895D4C26DEE124209AA9E&key=ik0]]></string>
+    <string name="change_email">Change Email</string>
+    <string name="already_confirm">Already Confirm?</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_email">Change Email</string>
+    <string name="submit">Submit</string>
 
 </resources>

@@ -12,6 +12,7 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
 
     val registerUserLiveData = repository.registerUserLiveData
     val handleBtnResentLiveData = MutableLiveData<Boolean>()
+    val handleBtnTextLiveData = MutableLiveData<String>()
 
     fun registerUser(user: HashMap<String, String>) = repository.registerUser(user)
 

@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.FragmentVerifyEmailBinding
+import com.ptkako.nv.novusvision.dialog.ChangeEmailDialog
 import com.ptkako.nv.novusvision.utility.convertMMSSFormat
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.utility.showToast
@@ -28,7 +29,9 @@ class VerifyEmailFragment : Fragment(R.layout.fragment_verify_email), DIAware {
         super.onViewCreated(view, savedInstanceState)
         retainInstance = true
 
-        binding.btnResendMail.setText(getString(R.string.resent_mail, "01:00"))
+        viewModel.handleBtnTextLiveData.observe(viewLifecycleOwner, Observer {
+            binding.btnResendMail.setText(it)
+        })
 
         viewModel.handleBtnResentLiveData.observe(viewLifecycleOwner, Observer {
             binding.btnResendMail.isEnabled = it
@@ -37,15 +40,18 @@ class VerifyEmailFragment : Fragment(R.layout.fragment_verify_email), DIAware {
         timer = object : CountDownTimer(60 * 1000, 1000) {
 
             override fun onTick(millisUntilFinished: Long) {
-                binding.btnResendMail.setText(getString(R.string.resent_mail,
-                    convertMMSSFormat(millisUntilFinished / 1000)))
+                context?.let {
+                    viewModel.handleBtnTextLiveData.value = getString(R.string.resent_mail,
+                        "(${convertMMSSFormat(millisUntilFinished / 1000)})")
+                }
             }
 
             override fun onFinish() {
-                binding.btnResendMail.setText(getString(R.string.resent_mail, "01:00"))
-                viewModel.handleBtnResentLiveData.value = true
+                context?.let {
+                    viewModel.handleBtnTextLiveData.value = getString(R.string.resent_mail, "")
+                    viewModel.handleBtnResentLiveData.value = true
+                }
             }
-
         }
 
         if (savedInstanceState == null) {
@@ -73,6 +79,13 @@ class VerifyEmailFragment : Fragment(R.layout.fragment_verify_email), DIAware {
             viewModel.resendEmailVerification()
         }
 
+        binding.btnAlreadyConfirm.setOnClickListener {
+
+        }
+
+        binding.btnChangeEmail.setOnClickListener {
+
+        }
     }
 
     private fun startTimer() {
@@ -80,8 +93,8 @@ class VerifyEmailFragment : Fragment(R.layout.fragment_verify_email), DIAware {
         timer.start()
     }
 
-    override fun onDestroyOptionsMenu() {
-        super.onDestroyOptionsMenu()
+    override fun onDestroy() {
+        super.onDestroy()
         timer.cancel()
     }
 

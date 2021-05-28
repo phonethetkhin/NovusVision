@@ -42,8 +42,8 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
 
                 is String -> {
                     requireActivity().showToast("Sign up successfully.")
-                    binding.root.findNavController().navigate(R.id.action_signupFragment_to_verifyEmailFragment)
                     viewModel.registerUserLiveData.postValue(null)
+                    binding.root.findNavController().navigate(R.id.action_signupFragment_to_verifyEmailFragment)
                 }
 
                 is Exception -> {

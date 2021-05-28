@@ -12,40 +12,58 @@ class AuthRepository(private val fireAuth: FirebaseAuth, private val fireStore: 
 
     fun registerUser(user: HashMap<String, String>) {
         runOnIO {
-            val result = fireAuth.createUserWithEmailAndPassword(user["email"] as String, user["password"] as String)
-            result.await()
-            if (result.isSuccessful) {
-                user["user_id"] = fireAuth.currentUser!!.uid
-                sendEmailVerification(user)
-            } else {
+            try {
+                val result = fireAuth.createUserWithEmailAndPassword(user["email"] as String, user["password"] as String)
+                result.await()
+                if (result.isSuccessful) {
+                    user["user_id"] = currentUser()!!.uid
+                    sendEmailVerification(user)
+                } else {
+                    runOnMain {
+                        registerUserLiveData.postValue(result.exception)
+                    }
+                }
+            } catch (e: Exception) {
                 runOnMain {
-                    registerUserLiveData.postValue(result.exception)
+                    registerUserLiveData.postValue(e)
                 }
             }
         }
     }
 
     suspend fun sendEmailVerification(user: HashMap<String, String>? = null) {
-
-        val result = fireAuth.currentUser!!.sendEmailVerification()
-        result.await()
-        if (result.isSuccessful)
-            if (user != null)
-                uploadUserData(user)
+        try {
+            val result = currentUser()!!.sendEmailVerification()
+            result.await()
+            if (result.isSuccessful)
+                if (user != null)
+                    uploadUserData(user)
+                else
+                    runOnMain { registerUserLiveData.postValue("Send successfully.") }
             else
-                runOnMain { registerUserLiveData.postValue("Send successfully.") }
-        else
-            runOnMain { registerUserLiveData.postValue(result.exception) }
+                runOnMain { registerUserLiveData.postValue(result.exception) }
+        } catch (e: Exception) {
+            runOnMain {
+                registerUserLiveData.postValue(e)
+            }
+        }
     }
 
-    private suspend fun uploadUserData(user: HashMap<String, String>) {
+    fun currentUser() = fireAuth.currentUser
 
-        val result = fireStore.collection("User").add(user)
-        result.await()
-        if (result.isSuccessful)
-            runOnMain { registerUserLiveData.postValue(result.result!!.id) }
-        else
-            runOnMain { registerUserLiveData.postValue(result.exception) }
+    private suspend fun uploadUserData(user: HashMap<String, String>) {
+        try {
+            val result = fireStore.collection("User").add(user)
+            result.await()
+            if (result.isSuccessful)
+                runOnMain { registerUserLiveData.postValue(result.result!!.id) }
+            else
+                runOnMain { registerUserLiveData.postValue(result.exception) }
+        } catch (e: Exception) {
+            runOnMain {
+                registerUserLiveData.postValue(e)
+            }
+        }
     }
 
 }
