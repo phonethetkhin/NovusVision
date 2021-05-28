@@ -11,4 +11,5 @@ data class MovieModel(val casts: String = "", val content_rating: String = "",
                       val movie_cover_photo: String = "", val movie_name: String = "",
                       val movie_photo: String = "", val overview: String = "",
                       val popularity: String = "", val production_year: String = "",
-                      val subtitle: String = "", val trailer_video_path: String = "") : Parcelable
+                      val subtitle: String = "", val statusCode: String = "",
+                      val trailer_video_path: String = "") : Parcelable

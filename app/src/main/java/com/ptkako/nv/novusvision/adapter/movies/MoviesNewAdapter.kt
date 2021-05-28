@@ -1,9 +1,10 @@
-package com.ptkako.nv.novusvision.adapter
+package com.ptkako.nv.novusvision.adapter.movies
 
 import adapterViewBinding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +15,7 @@ import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
 
-class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesAdapter.MoviesViewHolder>(diffCallback) {
+class MoviesNewAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesNewAdapter.MoviesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
 
     companion object {
@@ -44,6 +45,8 @@ class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, Movi
     }
 
     private fun setData(movie: MovieModel) {
+        Log.d("livedata","adapter: $movie")
+
         Glide.with(context).load(movie.movie_photo).into(binding.imgMoviesImage)
         binding.imgMoviesImage.setOnClickListener {
             val i = Intent(context, MovieDetailActivity::class.java)

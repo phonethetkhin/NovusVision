@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.MoviesAdapter
+import com.ptkako.nv.novusvision.adapter.movies.MoviesAllAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
@@ -23,12 +23,12 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
     override val di: DI by closestDI()
     private val homeViewModel: HomeViewModel by kodeinViewModel()
     private val binding by fragmentViewBinding(FragmentHomeBinding::bind)
-    private lateinit var moviesAdapter: MoviesAdapter
+    private lateinit var moviesAllAdapter: MoviesAllAdapter
     private lateinit var db: FirebaseFirestore
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moviesAdapter = MoviesAdapter(requireContext())
+        moviesAllAdapter = MoviesAllAdapter(requireContext())
         db = Firebase.firestore
 /*
         val moviesList = ArrayList<MoviesModel>()
@@ -46,16 +46,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
     private fun setBinding() = with(binding)
     {
         rcvTrending.setHasFixedSize(true)
-        rcvTrending.adapter = moviesAdapter
+        rcvTrending.adapter = moviesAllAdapter
 
         rcvContinueWatching.setHasFixedSize(true)
-        rcvContinueWatching.adapter = moviesAdapter
+        rcvContinueWatching.adapter = moviesAllAdapter
 
         rcvNewMovies.setHasFixedSize(true)
-        rcvNewMovies.adapter = moviesAdapter
+        rcvNewMovies.adapter = moviesAllAdapter
 
         rcvRecommended.setHasFixedSize(true)
-        rcvRecommended.adapter = moviesAdapter
+        rcvRecommended.adapter = moviesAllAdapter
 
         imbTrending.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbContinueWatching.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
