@@ -32,7 +32,7 @@ class MovieDetailActivity : AppCompatActivity() {
         Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
         imgMovieCover.setOnClickListener {
             val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
-            intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("videopath", bundle.full_video_path)
             startActivity(intent)
         }
 

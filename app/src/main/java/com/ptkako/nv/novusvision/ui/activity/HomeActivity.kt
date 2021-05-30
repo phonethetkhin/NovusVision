@@ -4,6 +4,7 @@ import activityViewBinding
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setSupportActionBar(binding.include.tlbToolbar)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcvHomeNavHostFragment) as NavHostFragment
         navController = navHostFragment.findNavController()

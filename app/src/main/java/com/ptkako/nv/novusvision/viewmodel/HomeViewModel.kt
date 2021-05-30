@@ -10,10 +10,26 @@ import com.ptkako.nv.novusvision.repository.HomeRepository
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
+    lateinit var allFinishLiveData: MutableLiveData<Int>
     lateinit var allMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     lateinit var popularMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     lateinit var newMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     lateinit var seriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
+
+
+    fun getFinishLiveData(): LiveData<Int> {
+        if (!::allFinishLiveData.isInitialized) {
+            allFinishLiveData = MutableLiveData(0)
+        }
+        return allFinishLiveData
+    }
+
+    fun setFinishLiveData(value:Int){
+        if(::allFinishLiveData.isInitialized)
+        {
+            allFinishLiveData.postValue(value)
+        }
+    }
 
     //movies
     fun getAllMovieListLiveData(): LiveData<ArrayList<MovieModel>> {
@@ -54,7 +70,8 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private suspend fun getNewMovieList() {
         newMovieListLiveData.postValue(repository.getNewMovieList())
     }
-//--------------------------------------------------------------------------------------------------------------------------//
+
+    //--------------------------------------------------------------------------------------------------------------------------//
     //series
     fun getSeriesListLiveData(): LiveData<ArrayList<SeriesModel>> {
         if (!::seriesListLiveData.isInitialized) {

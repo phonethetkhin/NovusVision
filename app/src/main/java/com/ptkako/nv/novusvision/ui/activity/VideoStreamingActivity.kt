@@ -1,7 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package com.ptkako.nv.novusvision.ui.activity
 
 import activityViewBinding
-import android.annotation.SuppressLint
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -13,10 +15,12 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.util.Util
 import com.ptkako.nv.novusvision.databinding.ActivityVideoStreamingBinding
+import com.ptkako.nv.novusvision.utility.showToast
+
 
 class VideoStreamingActivity : AppCompatActivity() {
     private var player: SimpleExoPlayer? = null
-    private var playWhenReady = false
+    private var playWhenReady = true
     private var playbackPosition: Long = 0
     private var playbackStateListener: PlaybackStateListener? = null
     private var currentWindow = 0
@@ -25,10 +29,18 @@ class VideoStreamingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        hideUI()
         playbackStateListener = PlaybackStateListener()
         videoPath = intent.getStringExtra("videopath")!!
         Log.d("vd", videoPath)
 
+    }
+
+    private fun hideUI() {
+        val decorView: View = window.decorView
+        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 
     override fun onStart() {
@@ -40,7 +52,6 @@ class VideoStreamingActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        // hideSystemUi()
         if (Util.SDK_INT < 24 && player == null) {
             initializePlayer()
         }
@@ -91,26 +102,11 @@ class VideoStreamingActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("InlinedApi")
-    private fun hideSystemUi() {
-        binding.exoPlayer.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
-                or View.SYSTEM_UI_FLAG_FULLSCREEN
-                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-    }
-
-    private class PlaybackStateListener : Player.EventListener {
+    inner class PlaybackStateListener : Player.EventListener {
         override fun onPlaybackStateChanged(playbackState: Int) {
-            val stateString: String = when (playbackState) {
-                ExoPlayer.STATE_IDLE -> "ExoPlayer.STATE_IDLE      -"
-                ExoPlayer.STATE_BUFFERING -> "ExoPlayer.STATE_BUFFERING -"
-                ExoPlayer.STATE_READY -> "ExoPlayer.STATE_READY     -"
-                ExoPlayer.STATE_ENDED -> "ExoPlayer.STATE_ENDED     -"
-                else -> "UNKNOWN_STATE             -"
+            if (playbackState == ExoPlayer.STATE_ENDED) {
+                showToast("Movie Ended")
             }
-            Log.d("tag", "changed state to $stateString")
         }
     }
 }

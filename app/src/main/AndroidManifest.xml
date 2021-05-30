@@ -18,19 +18,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.NovusVision">
-        <activity android:name=".ui.activity.VideoStreamingActivity"/>
+        <activity
+            android:name=".ui.activity.VideoStreamingActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
         <activity android:name=".ui.activity.EntireListActivity" />
         <activity android:name=".ui.activity.MovieDetailActivity" />
         <activity android:name=".ui.activity.SeriesDetailActivity" />
         <activity android:name=".ui.activity.AuthActivity" />
-        <activity android:name=".ui.activity.SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity"></activity>
+        <activity android:name=".ui.activity.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.HomeActivity" />
     </application>
 
 </manifest>

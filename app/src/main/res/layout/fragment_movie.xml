@@ -1,112 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragment.MovieFragment">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ProgressBar
+        android:id="@+id/pgbMovie"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nsvMovie"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="0dp">
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:context=".ui.fragment.MovieFragment">
 
-        <TextView
-            android:id="@+id/txtTrendingTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:text="@string/popular_movies"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/imbPopularMovies"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:id="@+id/imbPopularMovies"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/txtTrendingTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtTrendingTitle" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvPopularMovies"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtTrendingTitle" />
+            android:layout_height="0dp">
 
-        <TextView
-            android:id="@+id/txtContinueWatchingTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:text="@string/new_movies"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/imbNewMovies"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rcvPopularMovies" />
+            <TextView
+                android:id="@+id/txtTrendingTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:text="@string/popular_movies"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/imbPopularMovies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/imbNewMovies"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/txtContinueWatchingTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtContinueWatchingTitle" />
+            <ImageButton
+                android:id="@+id/imbPopularMovies"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_next"
+                app:layout_constraintBottom_toBottomOf="@+id/txtTrendingTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtTrendingTitle" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvNewMovies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtContinueWatchingTitle" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvPopularMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtTrendingTitle" />
 
-        <TextView
-            android:id="@+id/txtNewMovie"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:text="@string/all_movies"
-            android:textSize="@dimen/_12sdp"
-            app:layout_constraintEnd_toStartOf="@+id/imbAllMovies"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rcvNewMovies" />
+            <TextView
+                android:id="@+id/txtContinueWatchingTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:text="@string/new_movies"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/imbNewMovies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rcvPopularMovies" />
 
-        <ImageButton
-            android:id="@+id/imbAllMovies"
-            android:layout_width="@dimen/_26sdp"
-            android:layout_height="@dimen/_24sdp"
-            android:background="?attr/selectableItemBackground"
-            android:contentDescription="@string/app_name"
-            android:src="@drawable/ic_next"
-            app:layout_constraintBottom_toBottomOf="@+id/txtNewMovie"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtNewMovie" />
+            <ImageButton
+                android:id="@+id/imbNewMovies"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_next"
+                app:layout_constraintBottom_toBottomOf="@+id/txtContinueWatchingTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtContinueWatchingTitle" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcvAllMovies"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_8sdp"
-            android:orientation="horizontal"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtNewMovie" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvNewMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtContinueWatchingTitle" />
+
+            <TextView
+                android:id="@+id/txtNewMovie"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:text="@string/all_movies"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toStartOf="@+id/imbAllMovies"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rcvNewMovies" />
+
+            <ImageButton
+                android:id="@+id/imbAllMovies"
+                android:layout_width="@dimen/_26sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/ic_next"
+                app:layout_constraintBottom_toBottomOf="@+id/txtNewMovie"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/txtNewMovie" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvAllMovies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtNewMovie" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

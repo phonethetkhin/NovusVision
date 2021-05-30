@@ -33,8 +33,17 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
         moviesAllAdapter = MoviesAllAdapter(requireContext())
         moviesPopularAdapter = MoviesPopularAdapter(requireContext())
         moviesNewAdapter = MoviesNewAdapter(requireContext())
-        observeData()
+        homeViewModel.getFinishLiveData().observe(viewLifecycleOwner, Observer {
+            Log.d("itinc", it.toString())
+            if (it != null && it == 3) {
+                binding.pgbMovie.visibility = View.GONE
+                binding.nsvMovie.visibility = View.VISIBLE
+            }
+        })
+        observePopularMovie()
         setBinding()
+
+
     }
 
     private fun setBinding() = with(binding)
@@ -42,32 +51,43 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
         imbPopularMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbAllMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
-        rcvPopularMovies.setHasFixedSize(true)
-        rcvPopularMovies.adapter = moviesPopularAdapter
-
-        rcvNewMovies.setHasFixedSize(true)
-        rcvNewMovies.adapter = moviesNewAdapter
-
-        rcvAllMovies.setHasFixedSize(true)
-        rcvAllMovies.adapter = moviesAllAdapter
     }
 
-    private fun observeData() {
+    private fun observePopularMovie() {
         homeViewModel.getPopularMovieLiveData().observe(viewLifecycleOwner, Observer {
-            Log.d("livedata", "observePopular: $it")
-            moviesPopularAdapter.submitList(it)
+            if (it != null) {
+                homeViewModel.setFinishLiveData(1)
+                observeNewMovie()
+                Log.d("livedata", "observePopular: $it")
+                moviesPopularAdapter.submitList(it)
+                binding.rcvPopularMovies.setHasFixedSize(true)
+                binding.rcvPopularMovies.adapter = moviesPopularAdapter
+            }
         })
+    }
 
+    private fun observeNewMovie() {
         homeViewModel.getNewMovieListLiveData().observe(viewLifecycleOwner, Observer {
-            Log.d("livedata", "observeNew: $it")
-            moviesNewAdapter.submitList(it)
-
+            if (it != null) {
+                homeViewModel.setFinishLiveData(2)
+                observeAllMovie()
+                Log.d("livedata", "observeNew: $it")
+                moviesNewAdapter.submitList(it)
+                binding.rcvNewMovies.setHasFixedSize(true)
+                binding.rcvNewMovies.adapter = moviesNewAdapter
+            }
         })
+    }
 
+    private fun observeAllMovie() {
         homeViewModel.getAllMovieListLiveData().observe(viewLifecycleOwner, Observer {
-            Log.d("livedata", "observeAll: $it")
-            moviesAllAdapter.submitList(it)
-
+            if (it != null) {
+                homeViewModel.setFinishLiveData(3)
+                Log.d("livedata", "observeAll: $it")
+                moviesAllAdapter.submitList(it)
+                binding.rcvAllMovies.setHasFixedSize(true)
+                binding.rcvAllMovies.adapter = moviesAllAdapter
+            }
         })
     }
 }
