@@ -66,5 +66,6 @@
     <string name="already_confirm">Already Confirm?</string>
     <string name="cancel">Cancel</string>
     <string name="submit">Submit</string>
+    <string name="please_verify_your_email">Please verify your email.</string>
 
 </resources>

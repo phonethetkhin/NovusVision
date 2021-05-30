@@ -9,16 +9,19 @@ import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.ptkako.nv.novusvision.databinding.ProgressDialogLayoutBinding
 
-class ProgressDialogFragment(private val title: String?, private val message: String) : DialogFragment() {
+class ProgressDialogFragment : DialogFragment() {
     private lateinit var binding: ProgressDialogLayoutBinding
+    var title: String? = null
+    var message = ""
 
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT,WindowManager.LayoutParams.WRAP_CONTENT)
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         retainInstance = true
+        isCancelable = false
         return super.onCreateDialog(savedInstanceState)
     }
 

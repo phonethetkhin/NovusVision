@@ -56,25 +56,4 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnCancel" />
-
-
-    <LinearLayout
-        android:id="@+id/lnlProgressDialog"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="#90000000"
-        android:gravity="center"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/Widget.MaterialComponents.CircularProgressIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:progressTint="@color/colorPrimary" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

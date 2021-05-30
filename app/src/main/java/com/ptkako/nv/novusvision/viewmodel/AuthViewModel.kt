@@ -13,6 +13,17 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
     val registerUserLiveData = repository.registerUserLiveData
     val handleBtnResentLiveData = MutableLiveData<Boolean>()
     val handleBtnTextLiveData = MutableLiveData<String>()
+    val updateEmailLiveData = MutableLiveData<String>()
+    val reloadCurrentUserLivedata = MutableLiveData<Any>()
+    val userLoginLivedata = MutableLiveData<Any>()
+
+    fun userLogin(email: String, password: String) {
+        viewModelScope.launch {
+            userLoginLivedata.value = withContext(Dispatchers.IO) {
+                repository.userLogin(email, password)
+            }
+        }
+    }
 
     fun registerUser(user: HashMap<String, String>) = repository.registerUser(user)
 
@@ -20,6 +31,22 @@ class AuthViewModel(private val repository: AuthRepository) : ViewModel() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 repository.sendEmailVerification()
+            }
+        }
+    }
+
+    fun updateEmail(email: String) {
+        viewModelScope.launch {
+            updateEmailLiveData.value = withContext(Dispatchers.IO) {
+                repository.updateEmail(email)
+            }
+        }
+    }
+
+    fun reloadCurrentUser() {
+        viewModelScope.launch {
+            reloadCurrentUserLivedata.value = withContext(Dispatchers.IO) {
+                repository.reloadCurrentUser()
             }
         }
     }

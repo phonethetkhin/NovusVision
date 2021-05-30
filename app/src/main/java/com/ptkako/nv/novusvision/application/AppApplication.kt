@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.ptkako.nv.novusvision.dialog.ProgressDialogFragment
 import com.ptkako.nv.novusvision.repository.AuthRepository
 import com.ptkako.nv.novusvision.repository.HomeRepository
 import com.ptkako.nv.novusvision.viewmodel.AuthViewModel
@@ -18,6 +19,8 @@ class AppApplication : Application(), DIAware {
 
         bindSingleton { Firebase.firestore }
         bindSingleton { Firebase.auth }
+
+        bind<ProgressDialogFragment>() with provider { ProgressDialogFragment() }
 
         bindSingleton { ViewModelFactory(di.direct) }
 

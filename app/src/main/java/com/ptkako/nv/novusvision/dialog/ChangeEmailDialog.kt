@@ -5,19 +5,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.DialogUpdateEmailLayoutBinding
+import com.ptkako.nv.novusvision.listener.ChangeEmailListener
 import com.ptkako.nv.novusvision.utility.isEmailDataInvalid
-import com.ptkako.nv.novusvision.utility.showToast
 
-class ChangeEmailDialog(val updateEmail: () -> LiveData<Any>) : DialogFragment() {
+class ChangeEmailDialog(private val changeEmailListener: ChangeEmailListener) : DialogFragment() {
     private lateinit var binding: DialogUpdateEmailLayoutBinding
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         retainInstance = true
+        isCancelable = false
         return super.onCreateDialog(savedInstanceState)
     }
 
@@ -25,25 +30,21 @@ class ChangeEmailDialog(val updateEmail: () -> LiveData<Any>) : DialogFragment()
         binding = DialogUpdateEmailLayoutBinding.inflate(inflater, container, false)
 
         binding.btnSubmit.setOnClickListener {
-            binding.lnlProgressDialog.visibility = View.VISIBLE
             val email = binding.tetChangeEmail.text.toString().trim()
 
             when {
-                email.isNotEmpty() -> {
-                    binding.tilChangeEmail.isErrorEnabled = false
-                    updateEmail().observe(viewLifecycleOwner, Observer {
-                        binding.lnlProgressDialog.visibility = View.GONE
-                        context?.showToast("Success update")
-                        dismiss()
-                    })
+                email.isEmpty() -> {
+                    binding.tilChangeEmail.isErrorEnabled = true
+                    binding.tilChangeEmail.error = getString(R.string.enter_email)
                 }
                 isEmailDataInvalid(email) -> {
                     binding.tilChangeEmail.isErrorEnabled = true
                     binding.tilChangeEmail.error = getString(R.string.email_invalid)
                 }
                 else -> {
-                    binding.tilChangeEmail.isErrorEnabled = true
-                    binding.tilChangeEmail.error = getString(R.string.enter_email)
+                    binding.tilChangeEmail.isErrorEnabled = false
+                    dismiss()
+                    changeEmailListener.onEmailChange(email)
                 }
             }
         }

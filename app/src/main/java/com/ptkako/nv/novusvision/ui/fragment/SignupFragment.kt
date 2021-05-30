@@ -19,13 +19,14 @@ import fragmentViewBinding
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
+import org.kodein.di.instance
 
 class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
     override val di: DI by closestDI()
     private val binding by fragmentViewBinding(FragmentSignupBinding::bind)
 
     private val viewModel: AuthViewModel by kodeinViewModel()
-    private lateinit var progressDialog: ProgressDialogFragment
+    private val progressDialog: ProgressDialogFragment by instance()
     private var selectedQuestion = 0
     private lateinit var securityQuestion: Array<String>
 
@@ -35,7 +36,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
         setBinding()
 
         viewModel.registerUserLiveData.observe(viewLifecycleOwner, Observer {
-            if (::progressDialog.isInitialized && it != null) {
+            if (it != null) {
                 progressDialog.dismiss()
             }
             when (it) {
@@ -43,7 +44,7 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
                 is String -> {
                     requireActivity().showToast("Sign up successfully.")
                     viewModel.registerUserLiveData.postValue(null)
-                    binding.root.findNavController().navigate(R.id.action_signupFragment_to_verifyEmailFragment)
+                    view.findNavController().navigate(R.id.action_signupFragment_to_verifyEmailFragment)
                 }
 
                 is Exception -> {
@@ -106,9 +107,9 @@ class SignupFragment : Fragment(R.layout.fragment_signup), DIAware {
                     "vip_plan" to vipPlan.toString()
                 )
 
-                progressDialog = ProgressDialogFragment(getString(R.string.sign_up), getString(R.string.please_wait))
+                progressDialog.title = getString(R.string.sign_up)
+                progressDialog.message = getString(R.string.please_wait)
                 progressDialog.show(requireActivity().supportFragmentManager, PROGRESS_DIALOG_TAB)
-                progressDialog.isCancelable = false
 
                 viewModel.registerUser(user)
 

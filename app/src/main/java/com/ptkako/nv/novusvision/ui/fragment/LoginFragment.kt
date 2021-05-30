@@ -2,30 +2,60 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.FirebaseUser
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.FragmentLoginBinding
+import com.ptkako.nv.novusvision.dialog.ProgressDialogFragment
 import com.ptkako.nv.novusvision.ui.activity.HomeActivity
+import com.ptkako.nv.novusvision.utility.isEmailDataInvalid
+import com.ptkako.nv.novusvision.utility.kodeinViewModel
+import com.ptkako.nv.novusvision.utility.showToast
+import com.ptkako.nv.novusvision.viewmodel.AuthViewModel
 import fragmentViewBinding
+import org.kodein.di.DI
+import org.kodein.di.DIAware
+import org.kodein.di.android.x.closestDI
+import org.kodein.di.instance
 
-class LoginFragment : Fragment(R.layout.fragment_login) {
+class LoginFragment : Fragment(R.layout.fragment_login), DIAware {
+    override val di: DI by closestDI()
+
     private val binding by fragmentViewBinding(FragmentLoginBinding::bind)
-    private lateinit var auth: FirebaseAuth
+    private val viewModel: AuthViewModel by kodeinViewModel()
+    private val progressDialog: ProgressDialogFragment by instance()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        auth = Firebase.auth
+        retainInstance = true
+
+        viewModel.userLoginLivedata.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                progressDialog.dismiss()
+            }
+            when (it) {
+                is FirebaseUser -> {
+                    if (it.isEmailVerified) {
+                        requireActivity().startActivity(Intent(activity, HomeActivity::class.java))
+                        requireActivity().finish()
+                    } else {
+                        requireActivity().showToast(getString(R.string.please_verify_your_email))
+                        viewModel.userLoginLivedata.value = null
+                    }
+                }
+
+                is String -> {
+                    requireActivity().showToast(it)
+                    viewModel.userLoginLivedata.value = null
+                }
+            }
+        })
+
         binding.btnLogin.setOnClickListener {
-            //sample data
-            val email = "snowcat018@gmail.com"
-            val password = "abcdefgh"
-            userLogin(email, password)
+            userLogin()
         }
 
         binding.btnLoginSignup.setOnClickListener {
@@ -33,19 +63,47 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun userLogin(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    val user = auth.currentUser
-                    Log.d("Login", "signInWithEmail:success")
-                    activity?.startActivity(Intent(activity, HomeActivity::class.java))
-                    activity?.finish()
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.d("Login", "signInWithEmail:failure", task.exception)
-                }
+    private fun userLogin() {
+        if (isEmailInValid() or isPasswordInValid()) {
+            return
+        } else {
+            progressDialog.title = getString(R.string.login)
+            progressDialog.message = getString(R.string.please_wait)
+            progressDialog.show(requireActivity().supportFragmentManager, "Dialog Fragment")
+            viewModel.userLogin(binding.tetLoginEmail.text.toString().trim(), binding.tetLoginPassword.text.toString().trim())
+        }
+    }
+
+    private fun isEmailInValid(): Boolean {
+        return when {
+            binding.tetLoginEmail.text.toString().trim().isEmpty() -> {
+                binding.tilLoginEmail.isErrorEnabled = true
+                binding.tilLoginEmail.error = getString(R.string.enter_email)
+                true
             }
+            isEmailDataInvalid(binding.tetLoginEmail.text.toString().trim()) -> {
+                binding.tilLoginEmail.isErrorEnabled = true
+                binding.tilLoginEmail.error = getString(R.string.email_invalid)
+                true
+            }
+            else -> {
+                binding.tilLoginEmail.isErrorEnabled = false
+                false
+            }
+        }
+    }
+
+    private fun isPasswordInValid(): Boolean {
+        return when {
+            binding.tetLoginPassword.text.toString().trim().isEmpty() -> {
+                binding.tilLoginPassword.isErrorEnabled = true
+                binding.tilLoginPassword.error = getString(R.string.enter_password)
+                true
+            }
+            else -> {
+                binding.tilLoginPassword.isErrorEnabled = false
+                false
+            }
+        }
     }
 }
