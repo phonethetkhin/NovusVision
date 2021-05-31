@@ -9,9 +9,9 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movies.MoviesAllAdapter
-import com.ptkako.nv.novusvision.adapter.movies.MoviesNewAdapter
-import com.ptkako.nv.novusvision.adapter.movies.MoviesPopularAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesAllAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesNewAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesPopularAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentMovieBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel

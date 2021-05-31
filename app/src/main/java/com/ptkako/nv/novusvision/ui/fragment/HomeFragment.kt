@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movies.MoviesAllAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesAllAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel

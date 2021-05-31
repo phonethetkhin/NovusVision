@@ -7,8 +7,10 @@ import com.google.firebase.ktx.Firebase
 import com.ptkako.nv.novusvision.dialog.ProgressDialogFragment
 import com.ptkako.nv.novusvision.repository.AuthRepository
 import com.ptkako.nv.novusvision.repository.HomeRepository
+import com.ptkako.nv.novusvision.repository.SeriesDetailRepository
 import com.ptkako.nv.novusvision.viewmodel.AuthViewModel
 import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
+import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 import com.ptkako.nv.novusvision.viewmodel.ViewModelFactory
 import org.kodein.di.*
 import org.kodein.di.android.x.androidXModule
@@ -26,9 +28,11 @@ class AppApplication : Application(), DIAware {
 
         bindSingleton { AuthRepository(instance(), instance()) }
         bindSingleton { HomeRepository(instance(), instance()) }
+        bindSingleton { SeriesDetailRepository(instance(), instance()) }
 
         bind<AuthViewModel>(AuthViewModel::class.java.simpleName) with provider { AuthViewModel(instance()) }
         bind<HomeViewModel>(HomeViewModel::class.java.simpleName) with provider { HomeViewModel(instance()) }
+        bind<SeriesDetailViewModel>(SeriesDetailViewModel::class.java.simpleName) with provider { SeriesDetailViewModel(instance()) }
 
 
     }

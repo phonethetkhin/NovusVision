@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ListItemEpisodeBinding
 import com.ptkako.nv.novusvision.databinding.ListItemNumberBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
 
-class NumberAdapter(private val context: Context) : ListAdapter<String, NumberAdapter.NumberViewHolder>(diffCallback) {
+class NumberAdapter(val context: Context) : ListAdapter<String, NumberAdapter.NumberViewHolder>(diffCallback) {
     private lateinit var binding: ListItemNumberBinding
 
     companion object {
@@ -39,6 +40,9 @@ class NumberAdapter(private val context: Context) : ListAdapter<String, NumberAd
     override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
         val number = getItem(position)
         binding.txtSeasonNumber.text = number
+        binding.txtSeasonNumber.setOnClickListener {
+            binding.txtSeasonNumber.setTextColor(context.resources.getColor(R.color.colorPrimary))
+        }
     }
 
 }

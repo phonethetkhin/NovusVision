@@ -1,4 +1,4 @@
-package com.ptkako.nv.novusvision.adapter
+package com.ptkako.nv.novusvision.adapter.series
 
 import adapterViewBinding
 import android.content.Context
@@ -12,10 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.SeriesModel
-import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
 import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
-class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesAdapter.SeriesViewHolder>(diffCallback) {
+class SeriesPopularAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesPopularAdapter.SeriesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
 
     companion object {

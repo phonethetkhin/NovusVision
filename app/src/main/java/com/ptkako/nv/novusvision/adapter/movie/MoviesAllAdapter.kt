@@ -1,4 +1,4 @@
-package com.ptkako.nv.novusvision.adapter.movies
+package com.ptkako.nv.novusvision.adapter.movie
 
 import adapterViewBinding
 import android.content.Context

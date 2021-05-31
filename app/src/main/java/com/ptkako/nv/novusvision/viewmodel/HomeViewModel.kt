@@ -10,13 +10,36 @@ import com.ptkako.nv.novusvision.repository.HomeRepository
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
+    //tabControlVariable
+    lateinit var tabPositionLiveData : MutableLiveData<Int>
+
+    //fetchFinishControlVariable
     lateinit var allFinishLiveData: MutableLiveData<Int>
+
+    //moviesVariables
     lateinit var allMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     lateinit var popularMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     lateinit var newMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
-    lateinit var seriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
 
+    //seriesVariables
+    lateinit var allSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
+    lateinit var popularSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
+    lateinit var newSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
+    //tabPositionControl--------------------------------------------------------------------------//
+    fun getTabPositionLiveData(): LiveData<Int> {
+        if (!::tabPositionLiveData.isInitialized) {
+            tabPositionLiveData = MutableLiveData(0)
+        }
+        return tabPositionLiveData
+    }
 
+    fun setTabPositionLiveData(value: Int) {
+        if (::tabPositionLiveData.isInitialized) {
+            tabPositionLiveData.postValue(value)
+        }
+    }
+
+    //fetchFinishControl--------------------------------------------------------------------------//
     fun getFinishLiveData(): LiveData<Int> {
         if (!::allFinishLiveData.isInitialized) {
             allFinishLiveData = MutableLiveData(0)
@@ -24,14 +47,13 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
         return allFinishLiveData
     }
 
-    fun setFinishLiveData(value:Int){
-        if(::allFinishLiveData.isInitialized)
-        {
+    fun setFinishLiveData(value: Int) {
+        if (::allFinishLiveData.isInitialized) {
             allFinishLiveData.postValue(value)
         }
     }
 
-    //movies
+    //movies---------------------------------------------------------------------------------------//
     fun getAllMovieListLiveData(): LiveData<ArrayList<MovieModel>> {
         if (!::allMovieListLiveData.isInitialized) {
             allMovieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
@@ -71,18 +93,41 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
         newMovieListLiveData.postValue(repository.getNewMovieList())
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------//
-    //series
-    fun getSeriesListLiveData(): LiveData<ArrayList<SeriesModel>> {
-        if (!::seriesListLiveData.isInitialized) {
-            seriesListLiveData = MutableLiveData<ArrayList<SeriesModel>>()
-            viewModelScope.launch { getSeriesListData() }
+    //series--------------------------------------------------------------------------------------//
+    fun getAllSeriesListLiveData(): LiveData<ArrayList<SeriesModel>> {
+        if (!::allSeriesListLiveData.isInitialized) {
+            allSeriesListLiveData = MutableLiveData<ArrayList<SeriesModel>>()
+            viewModelScope.launch { getAllSeriesListData() }
         }
-        return seriesListLiveData
+        return allSeriesListLiveData
     }
 
-    private suspend fun getSeriesListData() {
-        seriesListLiveData.postValue(repository.getSeriesList())
+    private suspend fun getAllSeriesListData() {
+        allSeriesListLiveData.postValue(repository.getAllSeriesList())
+    }
+
+    fun getPopularSeriesListLiveData(): LiveData<ArrayList<SeriesModel>> {
+        if (!::popularSeriesListLiveData.isInitialized) {
+            popularSeriesListLiveData = MutableLiveData<ArrayList<SeriesModel>>()
+            viewModelScope.launch { getPopularSeriesListData() }
+        }
+        return popularSeriesListLiveData
+    }
+
+    private suspend fun getPopularSeriesListData() {
+        popularSeriesListLiveData.postValue(repository.getPopularSeriesList())
+    }
+
+    fun getNewSeriesListLiveData(): LiveData<ArrayList<SeriesModel>> {
+        if (!::newSeriesListLiveData.isInitialized) {
+            newSeriesListLiveData = MutableLiveData<ArrayList<SeriesModel>>()
+            viewModelScope.launch { getNewSeriesListData() }
+        }
+        return newSeriesListLiveData
+    }
+
+    private suspend fun getNewSeriesListData() {
+        newSeriesListLiveData.postValue(repository.getNewSeriesList())
     }
 
 }
