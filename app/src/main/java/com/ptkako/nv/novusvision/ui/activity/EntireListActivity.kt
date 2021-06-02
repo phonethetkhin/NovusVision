@@ -6,12 +6,12 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movie.MoviesAllAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.ActivityEntireListBinding
 
 class EntireListActivity : AppCompatActivity() {
     private val binding by activityViewBinding(ActivityEntireListBinding::inflate)
-    private lateinit var movieAllAdapter: MoviesAllAdapter
+    private lateinit var movieAllAdapter: MoviesAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

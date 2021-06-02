@@ -1,5 +1,6 @@
 package com.ptkako.nv.novusvision.viewmodel
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,14 +8,25 @@ import androidx.lifecycle.viewModelScope
 import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.repository.HomeRepository
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     //tabControlVariable
-    lateinit var tabPositionLiveData : MutableLiveData<Int>
+    lateinit var tabPositionLiveData: MutableLiveData<Int>
 
     //fetchFinishControlVariable
     lateinit var allFinishLiveData: MutableLiveData<Int>
+
+    //HomeFragmentVariables
+    private lateinit var trendingList: ArrayList<MovieModel>
+    private lateinit var continueWatchingList: ArrayList<MovieModel>
+    private lateinit var newMoviesList: ArrayList<MovieModel>
+    private lateinit var recommendedList: ArrayList<MovieModel>
+    var pgbHome = View.VISIBLE
+    var nsvHome = View.GONE
+    var dataStatus = 0
+
+    private lateinit var _movieListLiveData: MutableLiveData<ArrayList<MovieModel>>
 
     //moviesVariables
     lateinit var allMovieListLiveData: MutableLiveData<ArrayList<MovieModel>>
@@ -25,6 +37,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     lateinit var allSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
     lateinit var popularSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
     lateinit var newSeriesListLiveData: MutableLiveData<ArrayList<SeriesModel>>
+
     //tabPositionControl--------------------------------------------------------------------------//
     fun getTabPositionLiveData(): LiveData<Int> {
         if (!::tabPositionLiveData.isInitialized) {
@@ -54,6 +67,50 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     }
 
     //movies---------------------------------------------------------------------------------------//
+    fun movieListLiveData(): LiveData<ArrayList<MovieModel>> {
+        if (!::_movieListLiveData.isInitialized) {
+            _movieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
+            downloadMoviesForHome()
+        }
+        return _movieListLiveData
+    }
+
+    private fun downloadMoviesForHome() {
+        viewModelScope.launch(Dispatchers.IO) {
+
+            val allMoves = async { repository.getMovieList(null) }
+            val trending = async { repository.getMovieList("P") }
+            val newMovies = async { repository.getMovieList("N") }
+
+            trendingList = trending.await()
+            continueWatchingList = allMoves.await()
+            newMoviesList = newMovies.await()
+
+            withContext(Dispatchers.Main) {
+                getMovesList(1)
+            }
+        }
+
+    }
+
+    fun getMovesList(status: Int) {
+        _movieListLiveData.value = when (status) {
+
+            1 -> {
+                dataStatus = 1
+                trendingList
+            }
+            2 -> {
+                dataStatus = 2
+                continueWatchingList
+            }
+            else -> {
+                dataStatus = 3
+                newMoviesList
+            }
+        }
+    }
+
     fun getAllMovieListLiveData(): LiveData<ArrayList<MovieModel>> {
         if (!::allMovieListLiveData.isInitialized) {
             allMovieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
@@ -69,7 +126,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     fun getPopularMovieLiveData(): LiveData<ArrayList<MovieModel>> {
         if (!::popularMovieListLiveData.isInitialized) {
             popularMovieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
-            viewModelScope.launch { getPopularMovieList() }
+            viewModelScope.launch {
+                delay(3000)
+                getPopularMovieList()
+            }
+        } else {
+            popularMovieListLiveData.value = null
         }
         return popularMovieListLiveData
     }

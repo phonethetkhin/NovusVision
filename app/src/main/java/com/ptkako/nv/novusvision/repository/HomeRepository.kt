@@ -11,7 +11,27 @@ import kotlinx.coroutines.tasks.await
 
 class HomeRepository(private val context: Context, private val fireStore: FirebaseFirestore) {
 
+    private fun downloadMoviesList(statusCode: String?) =
+        if (statusCode == null) fireStore.collection("Movie").whereEqualTo("is_series", false).get()
+        else fireStore.collection("Movie").whereEqualTo("is_series", false).whereEqualTo("status_code", statusCode).get()
+
     //movies
+    suspend fun getMovieList(statusCode: String?): ArrayList<MovieModel> {
+        val movieList = ArrayList<MovieModel>()
+        val docRef = downloadMoviesList(statusCode)
+        docRef.await()
+        if (docRef.isSuccessful) {
+            docRef.result
+            docRef.result!!.forEach {
+                movieList.add(it.toObject())
+            }
+        } else {
+            context.showToast(docRef.exception!!.localizedMessage)
+        }
+
+        return movieList
+    }
+
     suspend fun getAllMovieList(): ArrayList<MovieModel> {
         val movieList = ArrayList<MovieModel>()
         val docRef = fireStore.collection("Movie").whereEqualTo("is_series", false).get()

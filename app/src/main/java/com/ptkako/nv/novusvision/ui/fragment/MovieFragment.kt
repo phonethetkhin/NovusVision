@@ -9,7 +9,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movie.MoviesAllAdapter
+import com.ptkako.nv.novusvision.adapter.movie.MoviesAdapter
 import com.ptkako.nv.novusvision.adapter.movie.MoviesNewAdapter
 import com.ptkako.nv.novusvision.adapter.movie.MoviesPopularAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentMovieBinding
@@ -24,13 +24,13 @@ import org.kodein.di.android.x.closestDI
 class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
     override val di: DI by closestDI()
     private val homeViewModel: HomeViewModel by kodeinViewModel()
-    private lateinit var moviesAllAdapter: MoviesAllAdapter
+    private lateinit var moviesAllAdapter: MoviesAdapter
     private lateinit var moviesPopularAdapter: MoviesPopularAdapter
     private lateinit var moviesNewAdapter: MoviesNewAdapter
     private val binding by fragmentViewBinding(FragmentMovieBinding::bind)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        moviesAllAdapter = MoviesAllAdapter(requireContext())
+        moviesAllAdapter = MoviesAdapter(requireContext())
         moviesPopularAdapter = MoviesPopularAdapter(requireContext())
         moviesNewAdapter = MoviesNewAdapter(requireContext())
         homeViewModel.getFinishLiveData().observe(viewLifecycleOwner, Observer {

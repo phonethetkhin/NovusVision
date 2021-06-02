@@ -15,7 +15,7 @@ import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
 
-class MoviesAllAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesAllAdapter.MoviesViewHolder>(diffCallback) {
+class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesAdapter.MoviesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
 
     companion object {
