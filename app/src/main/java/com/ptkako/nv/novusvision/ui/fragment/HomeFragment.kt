@@ -6,7 +6,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movie.MoviesAdapter
+import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
@@ -34,16 +34,16 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
 
         setBinding()
 
-        homeViewModel.movieListLiveData().observe(viewLifecycleOwner, Observer {
+        homeViewModel.getHomeMovieListLiveData().observe(viewLifecycleOwner, Observer {
 
             when (homeViewModel.dataStatus) {
                 1 -> {
                     trendingAdapter.submitList(it)
-                    homeViewModel.getMovesList(2)
+                    homeViewModel.getMovesListForHome(2)
                 }
                 2 -> {
                     continueWatchingAdapter.submitList(it)
-                    homeViewModel.getMovesList(3)
+                    homeViewModel.getMovesListForHome(3)
                 }
                 3 -> {
                     newMoviesAdapter.submitList(it)

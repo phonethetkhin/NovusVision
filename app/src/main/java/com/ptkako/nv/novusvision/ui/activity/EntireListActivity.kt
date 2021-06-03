@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.movie.MoviesAdapter
+import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.ActivityEntireListBinding
 
 class EntireListActivity : AppCompatActivity() {

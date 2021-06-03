@@ -1,4 +1,4 @@
-package com.ptkako.nv.novusvision.adapter.series
+package com.ptkako.nv.novusvision.adapter
 
 import adapterViewBinding
 import android.content.Context
@@ -14,7 +14,7 @@ import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
-class SeriesPopularAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesPopularAdapter.SeriesViewHolder>(diffCallback) {
+class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesAdapter.SeriesViewHolder>(diffCallback) {
     private lateinit var binding: ListItemMoviesBinding
 
     companion object {

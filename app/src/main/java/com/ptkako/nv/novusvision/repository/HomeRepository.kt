@@ -11,30 +11,32 @@ import kotlinx.coroutines.tasks.await
 
 class HomeRepository(private val context: Context, private val fireStore: FirebaseFirestore) {
 
-    private fun downloadMoviesList(statusCode: String?) =
-        if (statusCode == null) fireStore.collection("Movie").whereEqualTo("is_series", false).get()
-        else fireStore.collection("Movie").whereEqualTo("is_series", false).whereEqualTo("status_code", statusCode).get()
+    private fun getDocRef(collectionPath: String, statusCode: String?, isSeries: Boolean) =
+        if (statusCode == null) fireStore.collection(collectionPath).whereEqualTo("is_series", isSeries).get()
+        else fireStore.collection(collectionPath).whereEqualTo("is_series", isSeries).whereEqualTo("status_code", statusCode).get()
 
-    //movies
+
+    //home fragment
+    suspend fun getMovieListForHome(statusCode: String?): ArrayList<MovieModel> {
+        val movieList = ArrayList<MovieModel>()
+        val docRef = getDocRef("Movie", statusCode, false)
+        docRef.await()
+        if (docRef.isSuccessful) {
+            docRef.result
+            docRef.result!!.forEach {
+                movieList.add(it.toObject())
+            }
+        } else {
+            context.showToast(docRef.exception!!.localizedMessage)
+        }
+
+        return movieList
+    }
+
+    //movies------------------------------------------------------------------------------------//
     suspend fun getMovieList(statusCode: String?): ArrayList<MovieModel> {
         val movieList = ArrayList<MovieModel>()
-        val docRef = downloadMoviesList(statusCode)
-        docRef.await()
-        if (docRef.isSuccessful) {
-            docRef.result
-            docRef.result!!.forEach {
-                movieList.add(it.toObject())
-            }
-        } else {
-            context.showToast(docRef.exception!!.localizedMessage)
-        }
-
-        return movieList
-    }
-
-    suspend fun getAllMovieList(): ArrayList<MovieModel> {
-        val movieList = ArrayList<MovieModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", false).get()
+        val docRef = getDocRef("Movie", statusCode, false)
         docRef.await()
         if (docRef.isSuccessful) {
             docRef.result!!.forEach {
@@ -47,87 +49,19 @@ class HomeRepository(private val context: Context, private val fireStore: Fireba
         return movieList
     }
 
-    suspend fun getPopularMovieList(): ArrayList<MovieModel> {
-        val movieList = ArrayList<MovieModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", false).whereEqualTo("status_code", "P").get()
-        docRef.await()
-        if (docRef.isSuccessful) {
-            docRef.result
-            docRef.result!!.forEach {
-                movieList.add(it.toObject())
-            }
-        } else {
-            context.showToast(docRef.exception!!.localizedMessage)
-        }
-
-        return movieList
-    }
-
-    suspend fun getNewMovieList(): ArrayList<MovieModel> {
-        val movieList = ArrayList<MovieModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", false).whereEqualTo("status_code", "N").get()
-        docRef.await()
-        if (docRef.isSuccessful) {
-            docRef.result
-            docRef.result!!.forEach {
-                movieList.add(it.toObject())
-            }
-        } else {
-            context.showToast(docRef.exception!!.localizedMessage)
-        }
-
-        return movieList
-    }
-
-    //series
-    suspend fun getAllSeriesList(): ArrayList<SeriesModel> {
+    //series--------------------------------------------------------------------------------------//
+    suspend fun getSeriesList(statusCode: String?): ArrayList<SeriesModel> {
         val seriesList = ArrayList<SeriesModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", true).get()
+        val docRef = getDocRef("Movie", statusCode, true)
         docRef.await()
         if (docRef.isSuccessful) {
-            Log.d("ref", "getAllSeriesList: ${docRef.result}")
-
             docRef.result!!.forEach {
                 seriesList.add(it.toObject())
             }
-            Log.d("ref", "getAll: $seriesList")
-
         } else {
             context.showToast(docRef.exception!!.localizedMessage)
         }
-        return seriesList
-    }
 
-    suspend fun getPopularSeriesList(): ArrayList<SeriesModel> {
-        val seriesList = ArrayList<SeriesModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", true).whereEqualTo("status_code", "P").get()
-        docRef.await()
-        if (docRef.isSuccessful) {
-            Log.d("ref", "getPopularList: ${docRef.result}")
-            docRef.result!!.forEach {
-                seriesList.add(it.toObject())
-            }
-            Log.d("ref", "getPopular: $seriesList")
-
-        } else {
-            context.showToast(docRef.exception!!.localizedMessage)
-        }
-        return seriesList
-    }
-
-    suspend fun getNewSeriesList(): ArrayList<SeriesModel> {
-        val seriesList = ArrayList<SeriesModel>()
-        val docRef = fireStore.collection("Movie").whereEqualTo("is_series", true).whereEqualTo("status_code", "N").get()
-        docRef.await()
-        if (docRef.isSuccessful) {
-            Log.d("ref", "getNewList: ${docRef.result}")
-            docRef.result!!.forEach {
-                seriesList.add(it.toObject())
-            }
-            Log.d("ref", "getNewList: $seriesList")
-        } else {
-            context.showToast(docRef.exception!!.localizedMessage)
-        }
         return seriesList
     }
 }
