@@ -2,7 +2,6 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.ptkako.nv.novusvision.R
@@ -30,37 +29,36 @@ class SeriesFragment : Fragment(R.layout.fragment_series), DIAware {
         seriesNewAdapter = SeriesAdapter(requireContext())
         seriesAllAdapter = SeriesAdapter(requireContext())
         setVisibility()
-        observeMovie()
+        observeSeries()
         setBinding()
     }
 
     private fun setBinding() = with(binding)
     {
+        rcvPopularSeries.setHasFixedSize(true)
+        rcvPopularSeries.adapter = seriesPopularAdapter
+
+        rcvNewSeries.setHasFixedSize(true)
+        rcvNewSeries.adapter = seriesNewAdapter
+
+        rcvAllSeries.setHasFixedSize(true)
+        rcvAllSeries.adapter = seriesAllAdapter
+
         imbPopularSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbAllSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
     }
 
-    private fun observeMovie() {
+    private fun observeSeries() {
         homeViewModel.getSeriesListLiveData().observe(viewLifecycleOwner, {
-
             seriesPopularAdapter.submitList(it[0])
-            binding.rcvPopularSeries.setHasFixedSize(true)
-            binding.rcvPopularSeries.adapter = seriesPopularAdapter
-
             seriesNewAdapter.submitList(it[1])
-            binding.rcvNewSeries.setHasFixedSize(true)
-            binding.rcvNewSeries.adapter = seriesNewAdapter
-
             seriesAllAdapter.submitList(it[2])
-            binding.rcvAllSeries.setHasFixedSize(true)
-            binding.rcvAllSeries.adapter = seriesAllAdapter
-
             setVisibility()
         })
     }
-    private fun setVisibility() {
-        binding.pgbSeries.visibility = homeViewModel.pgbSeries
-        binding.nsvSeries.visibility = homeViewModel.nsvSeries
+    private fun setVisibility() = with(binding){
+        pgbSeries.visibility = homeViewModel.pgbSeries
+        nsvSeries.visibility = homeViewModel.nsvSeries
     }
 }

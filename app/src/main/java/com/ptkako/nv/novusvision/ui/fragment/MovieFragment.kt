@@ -4,7 +4,6 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -38,6 +37,15 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
 
     private fun setBinding() = with(binding)
     {
+        rcvPopularMovies.setHasFixedSize(true)
+        rcvPopularMovies.adapter = moviesPopularAdapter
+
+        rcvNewMovies.setHasFixedSize(true)
+        rcvNewMovies.adapter = moviesNewAdapter
+
+        rcvAllMovies.setHasFixedSize(true)
+        rcvAllMovies.adapter = moviesAllAdapter
+
         imbPopularMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbAllMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
@@ -45,24 +53,15 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
 
     private fun observeMovie() {
         homeViewModel.getMovieListLiveData().observe(viewLifecycleOwner, Observer {
-
             moviesPopularAdapter.submitList(it[0])
-            binding.rcvPopularMovies.setHasFixedSize(true)
-            binding.rcvPopularMovies.adapter = moviesPopularAdapter
-
             moviesNewAdapter.submitList(it[1])
-            binding.rcvNewMovies.setHasFixedSize(true)
-            binding.rcvNewMovies.adapter = moviesNewAdapter
-
             moviesAllAdapter.submitList(it[2])
-            binding.rcvAllMovies.setHasFixedSize(true)
-            binding.rcvAllMovies.adapter = moviesAllAdapter
             setVisibility()
-
         })
     }
-    private fun setVisibility() {
-        binding.pgbMovie.visibility = homeViewModel.pgbMovie
-        binding.nsvMovie.visibility = homeViewModel.nsvMovie
+
+    private fun setVisibility() = with(binding) {
+        pgbMovie.visibility = homeViewModel.pgbMovie
+        nsvMovie.visibility = homeViewModel.nsvMovie
     }
 }

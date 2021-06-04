@@ -42,5 +42,5 @@ inline fun <reified VM : ViewModel, T> T.kodeinViewModel(): Lazy<VM> where T : D
 }
 
 inline fun <reified VM : ViewModel, T> T.kodeinViewModel(): Lazy<VM> where T : DIAware, T : Fragment {
-    return lazy { ViewModelProvider(this, direct.instance()).get(VM::class.java) }
+    return lazy { ViewModelProvider(requireActivity(), direct.instance()).get(VM::class.java) }
 }

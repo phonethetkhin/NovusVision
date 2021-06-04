@@ -32,7 +32,6 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private lateinit var popularMovieList: ArrayList<MovieModel>
     private lateinit var newMovieList: ArrayList<MovieModel>
     private lateinit var allMovieList: ArrayList<MovieModel>
-    private lateinit var combinedMovieList : ArrayList<ArrayList<MovieModel>>
     private lateinit var movieListLiveData: MutableLiveData<ArrayList<ArrayList<MovieModel>>>
     var pgbMovie = View.VISIBLE
     var nsvMovie = View.GONE
@@ -41,7 +40,6 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private lateinit var popularSeriesList: ArrayList<SeriesModel>
     private lateinit var newSeriesList: ArrayList<SeriesModel>
     private lateinit var allSeriesList: ArrayList<SeriesModel>
-    private var combinedSeriesList = ArrayList<ArrayList<SeriesModel>>()
     private lateinit var seriesListLiveData: MutableLiveData<ArrayList<ArrayList<SeriesModel>>>
     var pgbSeries = View.VISIBLE
     var nsvSeries = View.GONE
@@ -118,18 +116,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     }
 
     private fun getMovieList() {
-        viewModelScope.launch(Dispatchers.IO) {
-            combinedMovieList = ArrayList<ArrayList<MovieModel>>()
+        viewModelScope.launch {
             popularMovieList = withContext(Dispatchers.IO) { repository.getMovieList("P") }
-            combinedMovieList.add(popularMovieList)
-
             newMovieList = withContext(Dispatchers.IO) { repository.getMovieList("N") }
-            combinedMovieList.add(newMovieList)
-
             allMovieList = withContext(Dispatchers.IO) { repository.getMovieList(null) }
-            combinedMovieList.add(allMovieList)
 
-            movieListLiveData.postValue(combinedMovieList)
+            movieListLiveData.postValue(arrayListOf(popularMovieList, newMovieList, allMovieList))
             pgbMovie = View.GONE
             nsvMovie = View.VISIBLE
         }
@@ -139,7 +131,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     fun getSeriesListLiveData(): LiveData<ArrayList<ArrayList<SeriesModel>>> {
         if (!::seriesListLiveData.isInitialized) {
             seriesListLiveData = MutableLiveData<ArrayList<ArrayList<SeriesModel>>>()
-            viewModelScope.launch { getSeriesList() }
+            getSeriesList()
         }
         return seriesListLiveData
     }
@@ -147,15 +139,10 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     private fun getSeriesList() {
         viewModelScope.launch {
             popularSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("P") }
-            combinedSeriesList.add(popularSeriesList)
-
             newSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("N") }
-            combinedSeriesList.add(newSeriesList)
-
             allSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList(null) }
-            combinedSeriesList.add(allSeriesList)
 
-            seriesListLiveData.postValue(combinedSeriesList)
+            seriesListLiveData.postValue(arrayListOf(popularSeriesList, newSeriesList, allSeriesList))
             pgbSeries = View.GONE
             nsvSeries = View.VISIBLE
         }
