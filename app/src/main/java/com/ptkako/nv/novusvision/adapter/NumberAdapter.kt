@@ -2,9 +2,7 @@ package com.ptkako.nv.novusvision.adapter
 
 import adapterViewBinding
 import android.content.Context
-import android.graphics.Paint
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,7 +11,7 @@ import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ListItemNumberBinding
 
 class NumberAdapter(val context: Context) : ListAdapter<String, NumberAdapter.NumberViewHolder>(diffCallback) {
-    private lateinit var binding: ListItemNumberBinding
+    var rowIndex = 0
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<String>() {
@@ -28,26 +26,36 @@ class NumberAdapter(val context: Context) : ListAdapter<String, NumberAdapter.Nu
         }
     }
 
-    inner class NumberViewHolder(view: View) :
-        RecyclerView.ViewHolder(view)
+    inner class NumberViewHolder(val binding: ListItemNumberBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NumberViewHolder {
-        binding = parent.adapterViewBinding(ListItemNumberBinding::inflate)
-        return NumberViewHolder(binding.root)
+        val v = parent.adapterViewBinding(ListItemNumberBinding::inflate)
+        return NumberViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
-        val number = getItem(position)
-        Log.d("adaptPos", "number: $number")
-        Log.d("adaptPos", "positon: $position")
-        binding.txtSeasonNumber.text = number
-        binding.txtSeasonNumber.setOnClickListener {
-            Log.d("adaptPos", "clickListener: $it")
-            Log.d("adaptPos", "clickListener: $position")
-           // it.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-
-            binding.txtSeasonNumber.setTextColor(context.resources.getColor(R.color.colorPrimary))
+        with(holder)
+        {
+            binding.txtSeasonNumber.setOnClickListener {
+                rowIndex = position
+                notifyDataSetChanged()
+                Log.d("adaptPos", "clickListener: $rowIndex")
+                Log.d("adaptPos", "clickListener: $position")
+            }
+            val number = getItem(position)
+            Log.d("adaptPos", "number: $number")
+            Log.d("adaptPos", "positon: $position")
+            Log.d("adaptPos", "rowIndex: $rowIndex")
+            binding.txtSeasonNumber.text = number
+            if (rowIndex == position) {
+                Log.d("adaptPos", " hello row index same")
+                binding.txtSeasonNumber.setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
+            } else {
+                binding.txtSeasonNumber.setBackgroundColor(0)
+            }
         }
+
     }
 
 }

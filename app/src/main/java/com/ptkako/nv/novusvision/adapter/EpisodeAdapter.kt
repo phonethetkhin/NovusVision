@@ -2,7 +2,6 @@ package com.ptkako.nv.novusvision.adapter
 
 import adapterViewBinding
 import android.content.Context
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,7 +11,6 @@ import com.ptkako.nv.novusvision.databinding.ListItemEpisodeBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
 
 class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
-    private lateinit var binding: ListItemEpisodeBinding
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<EpisodeModel>() {
@@ -27,20 +25,22 @@ class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, E
         }
     }
 
-    inner class EpisodeViewHolder(view: View) :
-        RecyclerView.ViewHolder(view)
+    inner class EpisodeViewHolder(val binding: ListItemEpisodeBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodeViewHolder {
-        binding = parent.adapterViewBinding(ListItemEpisodeBinding::inflate)
-        return EpisodeViewHolder(binding.root)
+        val v = parent.adapterViewBinding(ListItemEpisodeBinding::inflate)
+        return EpisodeViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: EpisodeViewHolder, position: Int) {
         val episode = getItem(position)
-
-        Glide.with(context).load(episode.imgUrl).into(binding.imgEpisodePhoto)
-        binding.txtEpisodeNumber.text = "Episode ${episode.episodeNumber}"
-        binding.txtEpisodeDescription.text = episode.episodeDescription
+        with(holder)
+        {
+            Glide.with(context).load(episode.imgUrl).into(binding.imgEpisodePhoto)
+            binding.txtEpisodeNumber.text = "Episode ${episode.episodeNumber}"
+            binding.txtEpisodeDescription.text = episode.episodeDescription
+        }
     }
 
 }

@@ -16,8 +16,6 @@ import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
 
 class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesAdapter.MoviesViewHolder>(diffCallback) {
-    private lateinit var binding: ListItemMoviesBinding
-
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<MovieModel>() {
             override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
@@ -31,30 +29,34 @@ class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, Movi
         }
     }
 
-    inner class MoviesViewHolder(view: View) :
-        RecyclerView.ViewHolder(view)
+    inner class MoviesViewHolder(val binding: ListItemMoviesBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
-        binding = parent.adapterViewBinding(ListItemMoviesBinding::inflate)
-        return MoviesViewHolder(binding.root)
+        val v = parent.adapterViewBinding(ListItemMoviesBinding::inflate)
+        return MoviesViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: MoviesViewHolder, position: Int) {
         val movie = getItem(position)
-        setData(movie)
+            setData(movie,holder)
+
     }
 
-    private fun setData(movie: MovieModel) {
-        Log.d("livedata","adapter: $movie")
+    private fun setData(movie: MovieModel, holder: MoviesViewHolder) {
+        with(holder)
+        {
+            Log.d("livedata", "adapter: $movie")
 
-        Glide.with(context).load(movie.movie_photo).into(binding.imgMoviesImage)
-        binding.imgMoviesImage.setOnClickListener {
-            val i = Intent(context, MovieDetailActivity::class.java)
-            val b = Bundle()
-            b.putParcelable("movie", movie)
-            i.putExtras(b)
-            context.startActivity(i)
+            Glide.with(context).load(movie.movie_photo).into(binding.imgMoviesImage)
+            binding.imgMoviesImage.setOnClickListener {
+                val i = Intent(context, MovieDetailActivity::class.java)
+                val b = Bundle()
+                b.putParcelable("movie", movie)
+                i.putExtras(b)
+                context.startActivity(i)
+            }
+            binding.txtMoviesTitle.text = movie.movie_name
         }
-        binding.txtMoviesTitle.text = movie.movie_name
     }
 }

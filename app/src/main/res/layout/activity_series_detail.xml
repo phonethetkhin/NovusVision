@@ -304,7 +304,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_8sdp"
                 android:text="@string/season"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_20sdp"
                 app:layout_constraintStart_toStartOf="@+id/txtOverViewTitle"
                 app:layout_constraintTop_toBottomOf="@+id/btnTrailer" />
 
@@ -314,7 +314,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:text="@string/divider"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_20sdp"
                 app:layout_constraintBottom_toBottomOf="@+id/txtSeasonTitle"
                 app:layout_constraintStart_toEndOf="@+id/txtSeasonTitle"
                 app:layout_constraintTop_toTopOf="@+id/txtSeasonTitle" />

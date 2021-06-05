@@ -4,7 +4,6 @@ import adapterViewBinding
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,7 +14,6 @@ import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
 class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, SeriesAdapter.SeriesViewHolder>(diffCallback) {
-    private lateinit var binding: ListItemMoviesBinding
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<SeriesModel>() {
@@ -30,28 +28,31 @@ class SeriesAdapter(private val context: Context) : ListAdapter<SeriesModel, Ser
         }
     }
 
-    inner class SeriesViewHolder(view: View) :
-        RecyclerView.ViewHolder(view)
+    inner class SeriesViewHolder(val binding: ListItemMoviesBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
-        binding = parent.adapterViewBinding(ListItemMoviesBinding::inflate)
-        return SeriesViewHolder(binding.root)
+        val v = parent.adapterViewBinding(ListItemMoviesBinding::inflate)
+        return SeriesViewHolder(v)
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
         val series = getItem(position)
-        setData(series)
+        setData(series, holder)
     }
 
-    private fun setData(series: SeriesModel) {
-        Glide.with(context).load(series.movie_photo).into(binding.imgMoviesImage)
-        binding.imgMoviesImage.setOnClickListener {
-            val i = Intent(context, SeriesDetailActivity::class.java)
-            val b = Bundle()
-            b.putParcelable("series", series)
-            i.putExtras(b)
-            context.startActivity(i)
+    private fun setData(series: SeriesModel, holder: SeriesViewHolder) {
+        with(holder)
+        {
+            Glide.with(context).load(series.movie_photo).into(binding.imgMoviesImage)
+            binding.imgMoviesImage.setOnClickListener {
+                val i = Intent(context, SeriesDetailActivity::class.java)
+                val b = Bundle()
+                b.putParcelable("series", series)
+                i.putExtras(b)
+                context.startActivity(i)
+            }
+            binding.txtMoviesTitle.text = series.movie_name
         }
-        binding.txtMoviesTitle.text = series.movie_name
     }
 }
