@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.ptkako.nv.novusvision.repository
 
 import android.content.Context
@@ -22,17 +24,16 @@ class SeriesDetailRepository(private val context: Context, private val fireStore
         }
         return seasonIdList
     }
-    /*fun getEpisodeList()
-    {
-        docRef.result!!.documents.forEach()
-        {
-            val map = it.data!!
-            map.forEach()
-            {
-                if (it.key == "episodes") {
-                    Log.d("seasonNum", it.value.toString())
-                }
-            }
+
+    suspend fun getEpisodeList(seriesId: String, seasonId: String) : ArrayList<String> {
+        val episodeList = ArrayList<String>()
+        val docRef = fireStore.collection("Series").document(seriesId).collection("Season").document(seasonId).get()
+        docRef.await()
+        if (docRef.isSuccessful) {
+            episodeList.addAll(docRef.result!!.get("episodes") as ArrayList<String>)
+        } else {
+            context.showToast(docRef.exception!!.localizedMessage)
         }
-    }*/
+        return episodeList
+    }
 }

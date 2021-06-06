@@ -11,24 +11,26 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.ptkako.nv.novusvision.R
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
-import com.ptkako.nv.novusvision.model.EpisodeModel
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
 class SeriesDetailActivity : AppCompatActivity(), DIAware {
     override val di: DI by closestDI()
     private val seriesDetailViewModel: SeriesDetailViewModel by kodeinViewModel()
+    private val fireStore: FirebaseFirestore by instance()
     private val binding by activityViewBinding(ActivitySeriesDetailBinding::inflate)
     private lateinit var episodeAdapter: EpisodeAdapter
     private lateinit var numberAdapter: NumberAdapter
+    var seasonId = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,13 +42,17 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         episodeAdapter = EpisodeAdapter(this)
         numberAdapter = NumberAdapter(this)
+        setVisibility()
+        observeSeriesDetail(bundle)
         setBinding(bundle)
 
+    }
 
-        seriesDetailViewModel.getSeasonNumberLiveData(bundle.series_id.toString()).observe(this, Observer { seasonIdList ->
-            if (seasonIdList != null && seasonIdList.size > 0) {
+    private fun observeSeriesDetail(bundle: SeriesModel) {
+        seriesDetailViewModel.getSeriesDetailLiveData(bundle.series_id.toString(), seasonId.toString()).observe(this, Observer {
+            if (it[0].size > 0) {
                 val numberList = ArrayList<String>()
-                seasonIdList.forEach()
+                it[0].forEach()
                 { seasonId ->
                     numberList.add(seasonId)
                 }
@@ -54,19 +60,19 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
                 Log.d("seasonNum", numberList.toString())
             }
+            if (it[1].size > 0) {
+                val episodeList = ArrayList<String>()
+                it[1].forEach()
+                { episode ->
+                    episodeList.add(episode)
+                }
+                episodeAdapter.submitList(episodeList)
+
+            }
+            setVisibility()
         })
 
-        val episodeList = ArrayList<EpisodeModel>()
-        episodeList.add(EpisodeModel(1, 1, R.drawable.captain_marvel, "Captain Marvel"))
-        episodeList.add(EpisodeModel(2, 2, R.drawable.game_of_throne, "Game of Thrones"))
-        episodeList.add(EpisodeModel(3, 3, R.drawable.spiderman, "Spiderman"))
-        episodeList.add(EpisodeModel(4, 4, R.drawable.superman, "Superman"))
-        episodeList.add(EpisodeModel(5, 5, R.drawable.warcraft, "Warcraft"))
 
-        episodeAdapter.submitList(episodeList)
-
-        binding.rcvSeasonNumber.setHasFixedSize(true)
-        binding.rcvSeasonNumber.adapter = numberAdapter
     }
 
     private fun setBinding(bundle: SeriesModel) = with(binding)
@@ -98,6 +104,8 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
         rcvEpisode.setHasFixedSize(true)
         rcvEpisode.adapter = episodeAdapter
+        binding.rcvSeasonNumber.setHasFixedSize(true)
+        binding.rcvSeasonNumber.adapter = numberAdapter
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -107,5 +115,8 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         return super.onOptionsItemSelected(item)
     }
 
-
+    private fun setVisibility() = with(binding) {
+        pgbSeriesDetail.visibility = seriesDetailViewModel.pgbSeriesDetail
+        nsvSeriesDetail.visibility = seriesDetailViewModel.nsvSeriesDetail
+    }
 }
