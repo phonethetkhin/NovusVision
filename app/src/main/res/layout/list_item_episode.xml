@@ -17,24 +17,33 @@
         app:srcCompat="@drawable/captain_marvel" />
 
     <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:textSize="@dimen/_15sdp"
+        android:textStyle="bold"
+        android:layout_marginEnd="@dimen/_8sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgEpisodePhoto"
+        app:layout_constraintTop_toTopOf="@+id/imgEpisodePhoto" />
+
+    <TextView
         android:id="@+id/txtEpisodeDescription"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/_8sdp"
-        android:text="Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia"
         android:textSize="@dimen/_12sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgEpisodePhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgEpisodePhoto"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
 
     <TextView
         android:id="@+id/txtEpisodeNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
-        android:text="Episode 1"
-        app:layout_constraintEnd_toStartOf="@+id/txtEpisodeDescription"
         app:layout_constraintStart_toStartOf="@+id/imgEpisodePhoto"
+        app:layout_constraintEnd_toEndOf="@+id/imgEpisodePhoto"
         app:layout_constraintTop_toBottomOf="@+id/imgEpisodePhoto" />
 </androidx.constraintlayout.widget.ConstraintLayout>

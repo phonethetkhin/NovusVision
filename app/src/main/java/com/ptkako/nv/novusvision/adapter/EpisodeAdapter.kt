@@ -10,15 +10,15 @@ import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.databinding.ListItemEpisodeBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
 
-class EpisodeAdapter(private val context: Context) : ListAdapter<String, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
+class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<String>() {
-            override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+        val diffCallback = object : DiffUtil.ItemCallback<EpisodeModel>() {
+            override fun areItemsTheSame(oldItem: EpisodeModel, newItem: EpisodeModel): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+            override fun areContentsTheSame(oldItem: EpisodeModel, newItem: EpisodeModel): Boolean {
                 return oldItem == newItem
             }
 
@@ -37,9 +37,10 @@ class EpisodeAdapter(private val context: Context) : ListAdapter<String, Episode
         val episode = getItem(position)
         with(holder)
         {
-            Glide.with(context).load(episode).into(binding.imgEpisodePhoto)
-           /* binding.txtEpisodeNumber.text = "Episode ${episode.episodeNumber}"
-            binding.txtEpisodeDescription.text = episode.episodeDescription*/
+            Glide.with(context).load(episode.episode_photo).into(binding.imgEpisodePhoto)
+            binding.txtEpisodeNumber.text = episode.episode_id
+            binding.txtTitle.text = episode.episode_title
+            binding.txtEpisodeDescription.text = episode.episode_description
         }
     }
 

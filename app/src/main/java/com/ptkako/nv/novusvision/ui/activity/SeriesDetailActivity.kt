@@ -6,7 +6,6 @@ import activityViewBinding
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -15,6 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
+import com.ptkako.nv.novusvision.model.EpisodeModel
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
@@ -43,35 +43,33 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         episodeAdapter = EpisodeAdapter(this)
         numberAdapter = NumberAdapter(this)
         setVisibility()
-        observeSeriesDetail(bundle)
+        observeSeasonIds(bundle)
         setBinding(bundle)
 
     }
 
-    private fun observeSeriesDetail(bundle: SeriesModel) {
-        seriesDetailViewModel.getSeriesDetailLiveData(bundle.series_id.toString(), seasonId.toString()).observe(this, Observer {
-            if (it[0].size > 0) {
-                val numberList = ArrayList<String>()
-                it[0].forEach()
-                { seasonId ->
-                    numberList.add(seasonId)
-                }
-                numberAdapter.submitList(numberList)
-
-                Log.d("seasonNum", numberList.toString())
+    private fun observeSeasonIds(bundle: SeriesModel) {
+        seriesDetailViewModel.getSeasonIdLiveData(bundle.series_id.toString()).observe(this, Observer {
+            val numberList = ArrayList<String>()
+            it.forEach()
+            { seasonId ->
+                numberList.add(seasonId)
             }
-            if (it[1].size > 0) {
-                val episodeList = ArrayList<String>()
-                it[1].forEach()
-                { episode ->
-                    episodeList.add(episode)
-                }
-                episodeAdapter.submitList(episodeList)
+            numberAdapter.submitList(numberList)
+            observeEpisodeList(bundle)
+        })
+    }
 
+    private fun observeEpisodeList(bundle: SeriesModel) {
+        seriesDetailViewModel.getEpisodeListLiveData(bundle.series_id.toString(), seasonId.toString()).observe(this, Observer {
+            val episodeList = ArrayList<EpisodeModel>()
+            it.forEach()
+            { episode ->
+                episodeList.add(episode)
             }
+            episodeAdapter.submitList(episodeList)
             setVisibility()
         })
-
 
     }
 
