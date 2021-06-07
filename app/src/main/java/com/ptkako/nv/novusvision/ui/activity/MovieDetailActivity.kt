@@ -44,8 +44,7 @@ class MovieDetailActivity : AppCompatActivity() {
         txtMoviesTitle.text = bundle.movie_name
         txtContentRating.text = bundle.content_rating
         txtGenre.text = bundle.genres
-        txtCountry.text = bundle.country
-        txtProductionYear.text = "(${bundle.production_year})"
+        txtCountryProductionYear.text = "${bundle.country} (${bundle.production_year} )"
         txtDuration.text = bundle.duration
         txtRating.text = bundle.popularity
         txtLanguage.text = bundle.language

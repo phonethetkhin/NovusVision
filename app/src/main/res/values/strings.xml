@@ -48,11 +48,11 @@
     <string name="check_connection">Please check your internet connection.</string>
 
     <string-array name="security_question">
-        <item>What is your sister name?</item>
-        <item>What is your sister favourite food?</item>
-        <item>What is your best friend name?</item>
-        <item>What is your girl friend name?</item>
-        <item>What is your younger sister name?</item>
+        <item>What is your mother name?</item>
+        <item>What is the name of your high school?</item>
+        <item>What is the name of your favorite pet?</item>
+        <item>What is the name of your birth place?</item>
+        <item>What are you afraid of?</item>
     </string-array>
 
     <string name="verify_your_email">Verify your email</string>

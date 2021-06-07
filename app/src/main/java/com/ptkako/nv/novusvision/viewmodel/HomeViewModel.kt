@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.repository.HomeRepository
@@ -19,14 +20,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     lateinit var tabPositionLiveData: MutableLiveData<Int>
 
     //HomeFragmentVariables
-    private lateinit var trendingList: ArrayList<MovieModel>
-    private lateinit var continueWatchingList: ArrayList<MovieModel>
-    private lateinit var newMoviesList: ArrayList<MovieModel>
-    private lateinit var recommendedList: ArrayList<MovieModel>
+    private lateinit var popularHomeList: ArrayList<MovieModel>
+    private lateinit var newHomeList: ArrayList<MovieModel>
+    private lateinit var allHomeList: ArrayList<MovieModel>
+    private lateinit var homeListLiveData: MutableLiveData<ArrayList<ArrayList<MovieModel>>>
     var pgbHome = View.VISIBLE
     var nsvHome = View.GONE
-    var dataStatus = 0
-    private lateinit var _movieListLiveData: MutableLiveData<ArrayList<MovieModel>>
 
     //movieFragmentVariables----------------------------------------------------------------------//
     private lateinit var popularMovieList: ArrayList<MovieModel>
@@ -59,46 +58,27 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     }
 
     //home---------------------------------------------------------------------------------------//
-    fun getHomeMovieListLiveData(): LiveData<ArrayList<MovieModel>> {
-        if (!::_movieListLiveData.isInitialized) {
-            _movieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
-            downloadMoviesForHome()
+    fun getHomeListLiveData(): LiveData<ArrayList<ArrayList<MovieModel>>> {
+        if (!::homeListLiveData.isInitialized) {
+            Log.d("pgb", "init")
+            homeListLiveData = MutableLiveData<ArrayList<ArrayList<MovieModel>>>()
+            getHomeList(null)
         }
-        return _movieListLiveData
+        Log.d("pgb", "notInit")
+        return homeListLiveData
     }
 
-    private fun downloadMoviesForHome() {
-        viewModelScope.launch(Dispatchers.IO) {
+    fun getHomeList(srlHome: SwipeRefreshLayout?) {
+        viewModelScope.launch {
+            popularHomeList = withContext(Dispatchers.IO) { repository.getMovieList("P") }
+            newHomeList = withContext(Dispatchers.IO) { repository.getMovieList("N") }
+            allHomeList = withContext(Dispatchers.IO) { repository.getMovieList(null) }
+            homeListLiveData.postValue(arrayListOf(popularHomeList, newHomeList, allHomeList))
 
-            val allMoves = async { repository.getMovieListForHome(null) }
-            val trending = async { repository.getMovieListForHome("P") }
-            val newMovies = async { repository.getMovieListForHome("N") }
-
-            trendingList = trending.await()
-            continueWatchingList = allMoves.await()
-            newMoviesList = newMovies.await()
-
-            withContext(Dispatchers.Main) {
-                getMovesListForHome(1)
-            }
-        }
-
-    }
-
-    fun getMovesListForHome(status: Int) {
-        _movieListLiveData.value = when (status) {
-
-            1 -> {
-                dataStatus = 1
-                trendingList
-            }
-            2 -> {
-                dataStatus = 2
-                continueWatchingList
-            }
-            else -> {
-                dataStatus = 3
-                newMoviesList
+            pgbHome = View.GONE
+            nsvHome = View.VISIBLE
+            if (srlHome != null) {
+                srlHome.isRefreshing = false
             }
         }
     }
@@ -109,21 +89,24 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
         if (!::movieListLiveData.isInitialized) {
             Log.d("pgb", "init")
             movieListLiveData = MutableLiveData<ArrayList<ArrayList<MovieModel>>>()
-            getMovieList()
+            getMovieList(null)
         }
         Log.d("pgb", "notInit")
         return movieListLiveData
     }
 
-    private fun getMovieList() {
+    fun getMovieList(srlMovie: SwipeRefreshLayout?) {
         viewModelScope.launch {
             popularMovieList = withContext(Dispatchers.IO) { repository.getMovieList("P") }
             newMovieList = withContext(Dispatchers.IO) { repository.getMovieList("N") }
             allMovieList = withContext(Dispatchers.IO) { repository.getMovieList(null) }
-
             movieListLiveData.postValue(arrayListOf(popularMovieList, newMovieList, allMovieList))
+
             pgbMovie = View.GONE
             nsvMovie = View.VISIBLE
+            if (srlMovie != null) {
+                srlMovie.isRefreshing = false
+            }
         }
     }
 
@@ -131,12 +114,12 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     fun getSeriesListLiveData(): LiveData<ArrayList<ArrayList<SeriesModel>>> {
         if (!::seriesListLiveData.isInitialized) {
             seriesListLiveData = MutableLiveData<ArrayList<ArrayList<SeriesModel>>>()
-            getSeriesList()
+            getSeriesList(null)
         }
         return seriesListLiveData
     }
 
-    private fun getSeriesList() {
+    fun getSeriesList(srlSeries:SwipeRefreshLayout?) {
         viewModelScope.launch {
             popularSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("P") }
             newSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("N") }
@@ -145,6 +128,10 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             seriesListLiveData.postValue(arrayListOf(popularSeriesList, newSeriesList, allSeriesList))
             pgbSeries = View.GONE
             nsvSeries = View.VISIBLE
+            if(srlSeries!=null)
+            {
+                srlSeries.isRefreshing = false
+            }
         }
     }
 

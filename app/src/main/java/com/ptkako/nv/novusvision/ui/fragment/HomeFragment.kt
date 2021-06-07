@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentHomeBinding
@@ -31,29 +30,9 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
         trendingAdapter = MoviesAdapter(requireContext())
         continueWatchingAdapter = MoviesAdapter(requireContext())
         newMoviesAdapter = MoviesAdapter(requireContext())
-
+        setVisibility()
+        observeHome()
         setBinding()
-
-        homeViewModel.getHomeMovieListLiveData().observe(viewLifecycleOwner, Observer {
-
-            when (homeViewModel.dataStatus) {
-                1 -> {
-                    trendingAdapter.submitList(it)
-                    homeViewModel.getMovesListForHome(2)
-                }
-                2 -> {
-                    continueWatchingAdapter.submitList(it)
-                    homeViewModel.getMovesListForHome(3)
-                }
-                3 -> {
-                    newMoviesAdapter.submitList(it)
-                    homeViewModel.pgbHome = View.GONE
-                    homeViewModel.nsvHome = View.VISIBLE
-                    displayView()
-                    homeViewModel.dataStatus = 1
-                }
-            }
-        })
 
     }
 
@@ -71,15 +50,26 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
         rcvRecommended.setHasFixedSize(true)
         // rcvRecommended.adapter = newMoviesAdapter
 
-        displayView()
-
         imbTrending.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbContinueWatching.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+        srlHome.setOnRefreshListener {
+            srlHome.isRefreshing = true
+            homeViewModel.getHomeList(srlHome)
+        }
     }
 
-    private fun displayView() {
+    private fun observeHome() {
+        homeViewModel.getHomeListLiveData().observe(viewLifecycleOwner, {
+            trendingAdapter.submitList(it[0])
+            newMoviesAdapter.submitList(it[1])
+            continueWatchingAdapter.submitList(it[2])
+            setVisibility()
+        })
+    }
+
+    private fun setVisibility() {
         binding.pgbHome.visibility = homeViewModel.pgbHome
         binding.nsvHome.visibility = homeViewModel.nsvHome
     }

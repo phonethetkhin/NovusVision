@@ -4,6 +4,7 @@ package com.ptkako.nv.novusvision.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,9 +15,14 @@ import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
 import fragmentViewBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.x.closestDI
+
 
 class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
     override val di: DI by closestDI()
@@ -49,6 +55,11 @@ class MovieFragment : Fragment(R.layout.fragment_movie), DIAware {
         imbPopularMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbAllMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+
+        srlMovie.setOnRefreshListener {
+                srlMovie.isRefreshing = true
+                homeViewModel.getMovieList(srlMovie)
+        }
     }
 
     private fun observeMovie() {

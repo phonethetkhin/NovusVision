@@ -16,24 +16,39 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/captain_marvel" />
 
+    <ImageView
+        android:id="@+id/imgPlay"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        android:contentDescription="@string/play_image"
+        app:layout_constraintBottom_toBottomOf="@+id/imgEpisodePhoto"
+        app:layout_constraintEnd_toEndOf="@+id/imgEpisodePhoto"
+        app:layout_constraintStart_toStartOf="@+id/imgEpisodePhoto"
+        app:layout_constraintTop_toTopOf="@+id/imgEpisodePhoto"
+        app:srcCompat="@drawable/ic_play_circle" />
+
     <TextView
         android:id="@+id/txtTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
-        android:textSize="@dimen/_15sdp"
-        android:textStyle="bold"
+        android:layout_marginTop="@dimen/_4sdp"
         android:layout_marginEnd="@dimen/_8sdp"
+        android:textSize="@dimen/_12sdp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgEpisodePhoto"
-        app:layout_constraintTop_toTopOf="@+id/imgEpisodePhoto" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtEpisodeDescription"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_8sdp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         android:textSize="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgEpisodePhoto"
         app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
@@ -43,7 +58,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
-        app:layout_constraintStart_toStartOf="@+id/imgEpisodePhoto"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="@+id/imgEpisodePhoto"
+        app:layout_constraintStart_toStartOf="@+id/imgEpisodePhoto"
         app:layout_constraintTop_toBottomOf="@+id/imgEpisodePhoto" />
 </androidx.constraintlayout.widget.ConstraintLayout>

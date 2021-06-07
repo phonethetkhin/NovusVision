@@ -47,6 +47,11 @@ class SeriesFragment : Fragment(R.layout.fragment_series), DIAware {
         imbPopularSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbNewSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
         imbAllSeries.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+
+        srlSeries.setOnRefreshListener {
+            srlSeries.isRefreshing = true
+            homeViewModel.getSeriesList(srlSeries)
+        }
     }
 
     private fun observeSeries() {
@@ -57,7 +62,8 @@ class SeriesFragment : Fragment(R.layout.fragment_series), DIAware {
             setVisibility()
         })
     }
-    private fun setVisibility() = with(binding){
+
+    private fun setVisibility() = with(binding) {
         pgbSeries.visibility = homeViewModel.pgbSeries
         nsvSeries.visibility = homeViewModel.nsvSeries
     }

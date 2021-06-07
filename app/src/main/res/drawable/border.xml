@@ -1,0 +1,10 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/tabborder">
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="2dp"
+                android:color="@color/colorPrimary" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+</layer-list>

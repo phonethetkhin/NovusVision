@@ -12,18 +12,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <ProgressBar
         android:id="@+id/pgbSeriesDetail"
         android:layout_width="@dimen/_50sdp"
         android:layout_height="@dimen/_50sdp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsvSeriesDetail"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,6 +58,18 @@
                 app:layout_constraintTop_toTopOf="@+id/imgMovieCover"
                 app:srcCompat="@drawable/ic_play_circle" />
 
+            <TextView
+                android:id="@+id/txtContentRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:background="@drawable/border"
+                android:padding="@dimen/_4sdp"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imgMovieCover" />
+
             <ImageView
                 android:id="@+id/imgMoviePhoto"
                 android:layout_width="@dimen/_80sdp"
@@ -66,7 +79,7 @@
                 android:contentDescription="@string/movie_photo_image"
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgMovieCover"
+                app:layout_constraintTop_toBottomOf="@+id/txtContentRating"
                 app:srcCompat="@drawable/game_of_throne" />
 
             <TextView
@@ -74,57 +87,42 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:textSize="@dimen/_20sdp"
-                app:layout_constraintEnd_toStartOf="@+id/txtContentRating"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imgMoviePhoto"
                 app:layout_constraintTop_toTopOf="@+id/imgMoviePhoto" />
 
             <TextView
-                android:id="@+id/txtContentRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/_8sdp"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintBottom_toBottomOf="@+id/txtMoviesTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/txtMoviesTitle" />
-
-            <TextView
                 android:id="@+id/txtGenre"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/txtMoviesTitle"
                 app:layout_constraintStart_toStartOf="@+id/txtMoviesTitle"
                 app:layout_constraintTop_toBottomOf="@+id/txtMoviesTitle" />
 
             <TextView
-                android:id="@+id/txtCountry"
-                android:layout_width="wrap_content"
+                android:id="@+id/txtCountryProductionYear"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/txtMoviesTitle"
                 app:layout_constraintStart_toStartOf="@+id/txtMoviesTitle"
                 app:layout_constraintTop_toBottomOf="@+id/txtGenre" />
 
-            <TextView
-                android:id="@+id/txtProductionYear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_4sdp"
-                android:layout_marginTop="@dimen/_4sdp"
-                android:textSize="@dimen/_12sdp"
-                app:layout_constraintStart_toEndOf="@+id/txtCountry"
-                app:layout_constraintTop_toBottomOf="@+id/txtGenre" />
 
             <TextView
                 android:id="@+id/txtDuration"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/txtMoviesTitle"
                 app:layout_constraintStart_toStartOf="@+id/txtMoviesTitle"
-                app:layout_constraintTop_toBottomOf="@+id/txtProductionYear" />
+                app:layout_constraintTop_toBottomOf="@+id/txtCountryProductionYear" />
 
             <TextView
                 android:id="@+id/txtRating"
@@ -180,11 +178,13 @@
 
             <TextView
                 android:id="@+id/txtLanguage"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_4sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/txtLanguageDivider"
                 app:layout_constraintTop_toBottomOf="@+id/txtOverViewTitle"
 
@@ -213,11 +213,12 @@
 
             <TextView
                 android:id="@+id/txtSubtitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_4sdp"
                 android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/txtLanguage"
                 app:layout_constraintStart_toEndOf="@+id/txtSubtitleDivider"
                 app:layout_constraintTop_toBottomOf="@+id/txtLanguage" />
 
@@ -278,7 +279,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginTop="@dimen/_16sdp"
+                android:drawableTop="@drawable/ic_play_trailer"
                 android:text="@string/trailer"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/btnAddToPlaylist"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -289,7 +292,9 @@
                 android:id="@+id/btnAddToPlaylist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_playlist"
                 android:text="@string/add_to_playlist"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/btnTrailer"
                 app:layout_constraintEnd_toStartOf="@+id/btnDownload"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -301,7 +306,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_8sdp"
+                android:drawableTop="@drawable/ic_download"
+                android:src="@drawable/ic_download"
                 android:text="@string/download"
+                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/btnAddToPlaylist"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"

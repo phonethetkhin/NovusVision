@@ -17,7 +17,7 @@ class HomeRepository(private val context: Context, private val fireStore: Fireba
 
 
     //home fragment
-    suspend fun getMovieListForHome(statusCode: String?): ArrayList<MovieModel> {
+  /*  suspend fun getMovieListForHome(statusCode: String?): ArrayList<MovieModel> {
         val movieList = ArrayList<MovieModel>()
         val docRef = getDocRef("Movie", statusCode, false)
         docRef.await()
@@ -31,7 +31,7 @@ class HomeRepository(private val context: Context, private val fireStore: Fireba
         }
 
         return movieList
-    }
+    }*/
 
     //movies------------------------------------------------------------------------------------//
     suspend fun getMovieList(statusCode: String?): ArrayList<MovieModel> {
