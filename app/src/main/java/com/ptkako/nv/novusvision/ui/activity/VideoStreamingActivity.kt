@@ -1,13 +1,18 @@
 @file:Suppress("DEPRECATION")
+@file:SuppressLint("ClickableViewAccessibility")
+
 
 package com.ptkako.nv.novusvision.ui.activity
 
 import activityViewBinding
+import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
@@ -25,27 +30,35 @@ class VideoStreamingActivity : AppCompatActivity() {
     private var playbackStateListener: PlaybackStateListener? = null
     private var currentWindow = 0
     var videoPath = ""
+    var episodeList: ArrayList<String>? = null
+    var titleList: ArrayList<String>? = null
     private val binding by activityViewBinding(ActivityVideoStreamingBinding::inflate)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         this.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        hideUI()
         playbackStateListener = PlaybackStateListener()
         videoPath = intent.getStringExtra("videopath")!!
+        episodeList = intent.getStringArrayListExtra("episodelist")?.toCollection(ArrayList())
+        titleList = intent.getStringArrayListExtra("titlelist")?.toCollection(ArrayList())
         Log.d("vd", videoPath)
+        Log.d("vd", episodeList.toString())
 
     }
 
     private fun hideUI() {
-        val decorView: View = window.decorView
-        decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        binding.exoPlayer.systemUiVisibility = (View.SYSTEM_UI_FLAG_LOW_PROFILE
+                or View.SYSTEM_UI_FLAG_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
     }
 
     override fun onStart() {
         super.onStart()
         if (Util.SDK_INT >= 24) {
+            hideUI()
             initializePlayer()
         }
     }
@@ -53,6 +66,7 @@ class VideoStreamingActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         if (Util.SDK_INT < 24 && player == null) {
+            hideUI()
             initializePlayer()
         }
     }
@@ -79,15 +93,29 @@ class VideoStreamingActivity : AppCompatActivity() {
             player = SimpleExoPlayer.Builder(this)
                 .setTrackSelector(trackSelector)
                 .build()
-            val mediaItem = MediaItem.Builder()
-                .setUri(videoPath)
-                .build()
             binding.exoPlayer.player = player
-            player!!.setMediaItem(mediaItem)
+
+            if (episodeList != null) {
+                if (episodeList!!.isNotEmpty()) {
+                    episodeList!!.forEach()
+                    {
+                        player!!.addMediaItem(MediaItem.fromUri(it))
+                    }
+                    val position = episodeList!!.indexOf(videoPath)
+                    player!!.moveMediaItem(position, 0)
+                    Log.d("vdpos", "$position")
+                    Log.d("vdpos", "${player!!.mediaItemCount}")
+                }
+            } else {
+                player!!.addMediaItem(MediaItem.fromUri(videoPath))
+            }
+
             player!!.playWhenReady = playWhenReady
             player!!.seekTo(currentWindow, playbackPosition)
             player!!.addListener(playbackStateListener!!)
             player!!.prepare()
+            binding.doubleTapHandler.player(player!!)
+            doubleTapListener()
         }
     }
 
@@ -108,5 +136,20 @@ class VideoStreamingActivity : AppCompatActivity() {
                 showToast("Movie Ended")
             }
         }
+    }
+
+    private fun doubleTapListener() {
+        binding.doubleTapHandler
+            .performListener(object : YouTubeOverlay.PerformListener {
+                override fun onAnimationStart() {
+                    // Do UI changes when circle scaling animation starts (e.g. hide controller views)
+                    binding.doubleTapHandler.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationEnd() {
+                    // Do UI changes when circle scaling animation starts (e.g. show controller views)
+                    binding.doubleTapHandler.visibility = View.GONE
+                }
+            })
     }
 }

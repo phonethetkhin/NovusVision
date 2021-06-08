@@ -1,5 +1,6 @@
 package com.ptkako.nv.novusvision.viewmodel
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,6 +19,12 @@ class SeriesDetailViewModel(private val repository: SeriesDetailRepository) : Vi
     private lateinit var episodeList: ArrayList<EpisodeModel>
     var pgbSeriesDetail = View.VISIBLE
     var nsvSeriesDetail = View.GONE
+    var currentSeasonId = 0
+    var seasonId = 1
+    var rowIndex = 0
+
+
+
 
     fun getSeasonIdLiveData(seriesId: String): LiveData<ArrayList<String>> {
         if (!::seasonIdsLiveData.isInitialized) {
@@ -34,11 +41,18 @@ class SeriesDetailViewModel(private val repository: SeriesDetailRepository) : Vi
         }
     }
 
-    fun getEpisodeListLiveData(seriesId: String, seasonId: String): LiveData<ArrayList<EpisodeModel>> {
-        if (!::episodeListLiveData.isInitialized) {
+    fun getEpisodeListLiveData(seriesId: String): LiveData<ArrayList<EpisodeModel>> {
+        if (!::episodeListLiveData.isInitialized || currentSeasonId != seasonId) {
+            currentSeasonId = seasonId
+            Log.d("sid", "init")
+            Log.d("sid", "$currentSeasonId")
+            Log.d("sid", "$seasonId")
+
             episodeListLiveData = MutableLiveData<ArrayList<EpisodeModel>>()
-            getEpisodeList(seriesId, seasonId)
+            getEpisodeList(seriesId, seasonId.toString())
         }
+        Log.d("sid", "not init")
+
         return episodeListLiveData
     }
 

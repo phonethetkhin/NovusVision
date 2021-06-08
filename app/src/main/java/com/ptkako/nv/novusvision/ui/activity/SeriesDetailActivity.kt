@@ -6,11 +6,10 @@ import activityViewBinding
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
@@ -21,47 +20,47 @@ import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
-import org.kodein.di.instance
 
 class SeriesDetailActivity : AppCompatActivity(), DIAware {
     override val di: DI by closestDI()
     private val seriesDetailViewModel: SeriesDetailViewModel by kodeinViewModel()
-    private val fireStore: FirebaseFirestore by instance()
     private val binding by activityViewBinding(ActivitySeriesDetailBinding::inflate)
     private lateinit var episodeAdapter: EpisodeAdapter
     private lateinit var numberAdapter: NumberAdapter
-    var seasonId = 1
+    lateinit var bundle: SeriesModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include3.tlbToolbar)
-        val bundle = intent.getParcelableExtra<SeriesModel>("series")!!
+        bundle = intent.getParcelableExtra<SeriesModel>("series")!!
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         episodeAdapter = EpisodeAdapter(this)
-        numberAdapter = NumberAdapter(this)
+        numberAdapter = NumberAdapter(this, seriesDetailViewModel)
         setVisibility()
-        observeSeasonIds(bundle)
-        setBinding(bundle)
+        observeSeasonIds()
+        setBinding()
 
     }
 
-    private fun observeSeasonIds(bundle: SeriesModel) {
-        seriesDetailViewModel.getSeasonIdLiveData(bundle.series_id.toString()).observe(this, Observer {
+    private fun observeSeasonIds() {
+        seriesDetailViewModel.getSeasonIdLiveData(bundle.series_id.toString()).observe(this, {
             val numberList = ArrayList<String>()
             it.forEach()
             { seasonId ->
                 numberList.add(seasonId)
             }
             numberAdapter.submitList(numberList)
-            observeEpisodeList(bundle)
+            observeEpisodeList()
         })
     }
 
-    private fun observeEpisodeList(bundle: SeriesModel) {
-        seriesDetailViewModel.getEpisodeListLiveData(bundle.series_id.toString(), seasonId.toString()).observe(this, Observer {
+    fun observeEpisodeList() {
+        seriesDetailViewModel.getEpisodeListLiveData(bundle.series_id.toString()).observe(this, {
+            Log.d("sid", "${seriesDetailViewModel.seasonId}")
+            Log.d("sid", "$it")
             val episodeList = ArrayList<EpisodeModel>()
             it.forEach()
             { episode ->
@@ -73,7 +72,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
     }
 
-    private fun setBinding(bundle: SeriesModel) = with(binding)
+    private fun setBinding() = with(binding)
     {
         Glide.with(this@SeriesDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
         Glide.with(this@SeriesDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
@@ -116,4 +115,5 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         pgbSeriesDetail.visibility = seriesDetailViewModel.pgbSeriesDetail
         nsvSeriesDetail.visibility = seriesDetailViewModel.nsvSeriesDetail
     }
+
 }

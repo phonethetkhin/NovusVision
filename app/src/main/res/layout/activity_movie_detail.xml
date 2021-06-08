@@ -307,7 +307,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_8sdp"
                 android:drawableTop="@drawable/ic_download"
-                android:src="@drawable/ic_download"
                 android:text="@string/download"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/btnAddToPlaylist"

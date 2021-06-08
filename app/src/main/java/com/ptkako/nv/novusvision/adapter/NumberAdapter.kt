@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ListItemNumberBinding
+import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
+import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 
-class NumberAdapter(val context: Context) : ListAdapter<String, NumberAdapter.NumberViewHolder>(diffCallback) {
-    var rowIndex = 0
+class NumberAdapter(val context: Context,val seriesDetailViewModel: SeriesDetailViewModel) : ListAdapter<String, NumberAdapter.NumberViewHolder>(diffCallback) {
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<String>() {
@@ -37,19 +38,17 @@ class NumberAdapter(val context: Context) : ListAdapter<String, NumberAdapter.Nu
     override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
         with(holder)
         {
-            binding.txtSeasonNumber.setOnClickListener {
-                rowIndex = position
-                notifyDataSetChanged()
-                Log.d("adaptPos", "clickListener: $rowIndex")
-                Log.d("adaptPos", "clickListener: $position")
-            }
             val number = getItem(position)
-            Log.d("adaptPos", "number: $number")
-            Log.d("adaptPos", "positon: $position")
-            Log.d("adaptPos", "rowIndex: $rowIndex")
+            binding.txtSeasonNumber.setOnClickListener {
+                Log.d("sid", "${position+1}")
+                seriesDetailViewModel.seasonId = position+1
+                (context as SeriesDetailActivity).observeEpisodeList()
+                seriesDetailViewModel.rowIndex = position
+                notifyDataSetChanged()
+
+            }
             binding.txtSeasonNumber.text = number
-            if (rowIndex == position) {
-                Log.d("adaptPos", " hello row index same")
+            if (seriesDetailViewModel.rowIndex == position) {
                 binding.txtSeasonNumber.setBackgroundColor(context.resources.getColor(R.color.colorPrimary))
             } else {
                 binding.txtSeasonNumber.setBackgroundColor(0)
