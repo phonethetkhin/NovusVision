@@ -52,8 +52,9 @@ class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, E
                 }
                 val i = Intent(context, VideoStreamingActivity::class.java)
                 i.putExtra("videopath", episode.episode_url)
-                i.putExtra("episodelist",episodeList )
-                i.putExtra("titlelist",titleList )
+                i.putExtra("title", episode.episode_id)
+                i.putExtra("episodelist", episodeList)
+                i.putExtra("titlelist", titleList)
                 context.startActivity(i)
             }
             Glide.with(context).load(episode.episode_photo).into(binding.imgEpisodePhoto)

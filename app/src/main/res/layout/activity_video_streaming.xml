@@ -6,24 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.VideoStreamingActivity">
 
-   <!-- <com.google.android.exoplayer2.ui.PlayerView
-        android:id="@+id/exoPlayer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:fastforward_increment="10000"
-        app:resize_mode="fill"
-        app:rewind_increment="10000"
-        app:show_timeout="5000" />-->
     <com.github.vkay94.dtpv.DoubleTapPlayerView
         android:id="@+id/exoPlayer"
         android:layout_width="match_parent"
-        app:resize_mode="fill"
-        app:show_buffering="always"
-        app:hide_on_touch="true"
         android:layout_height="match_parent"
-        app:use_controller="true"
+        app:controller_layout_id="@layout/exo_controller"
+        app:dtpv_controller="@+id/doubleTapHandler"
+        app:hide_on_touch="true"
+        app:resize_mode="fill"
+        app:show_buffering="never"
         app:show_timeout="5000"
-        app:dtpv_controller="@+id/doubleTapHandler" />
+        app:use_controller="true" />
 
     <com.github.vkay94.dtpv.youtube.YouTubeOverlay
         android:id="@+id/doubleTapHandler"

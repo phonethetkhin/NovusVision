@@ -14,31 +14,33 @@ import com.ptkako.nv.novusvision.model.MovieModel
 
 class MovieDetailActivity : AppCompatActivity() {
     private val binding by activityViewBinding(ActivityMovieDetailBinding::inflate)
-
+    lateinit var bundle: MovieModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include2.tlbToolbar)
-        val bundle = intent.getParcelableExtra<MovieModel>("movie")!!
+        bundle = intent.getParcelableExtra<MovieModel>("movie")!!
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        setBinding(bundle)
+        setBinding()
     }
 
-    private fun setBinding(bundle: MovieModel) = with(binding)
+    private fun setBinding() = with(binding)
     {
         Glide.with(this@MovieDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
         Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
         imgMovieCover.setOnClickListener {
             val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.full_video_path)
+            intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
 
         btnTrailer.setOnClickListener {
             val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
         txtMoviesTitle.text = bundle.movie_name

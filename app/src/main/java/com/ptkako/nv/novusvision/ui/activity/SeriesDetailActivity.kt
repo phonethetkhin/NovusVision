@@ -79,12 +79,14 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         imgMovieCover.setOnClickListener {
             val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
 
         btnTrailer.setOnClickListener {
             val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
         txtMoviesTitle.text = bundle.movie_name
