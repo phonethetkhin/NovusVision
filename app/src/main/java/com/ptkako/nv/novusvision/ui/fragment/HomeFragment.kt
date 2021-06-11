@@ -50,14 +50,20 @@ class HomeFragment : Fragment(R.layout.fragment_home), DIAware {
         rcvRecommended.setHasFixedSize(true)
         // rcvRecommended.adapter = newMoviesAdapter
 
-        imbTrending.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
-        imbContinueWatching.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
-        imbNewMovies.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
-        imbRecommended.setOnClickListener { startActivity(Intent(requireActivity(), EntireListActivity::class.java)) }
+        imbTrending.setOnClickListener { intentToEntireActivity("P") }
+        imbContinueWatching.setOnClickListener { intentToEntireActivity("N") }
+        imbNewMovies.setOnClickListener { intentToEntireActivity(null) }
+        imbRecommended.setOnClickListener { }
         srlHome.setOnRefreshListener {
             srlHome.isRefreshing = true
             homeViewModel.getHomeList(srlHome)
         }
+    }
+
+    private fun intentToEntireActivity(statusCode: String?) {
+        val intent = Intent(requireActivity(), EntireListActivity::class.java)
+        intent.putExtra("statusCode", statusCode)
+        startActivity(intent)
     }
 
     private fun observeHome() {
