@@ -12,7 +12,7 @@ import com.ptkako.nv.novusvision.databinding.ListItemEpisodeBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
 import com.ptkako.nv.novusvision.ui.activity.VideoStreamingActivity
 
-class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
+class EpisodeAdapter(private val context: Context, val movieName: String) : ListAdapter<EpisodeModel, EpisodeAdapter.EpisodeViewHolder>(diffCallback) {
 
     companion object {
         val diffCallback = object : DiffUtil.ItemCallback<EpisodeModel>() {
@@ -48,11 +48,11 @@ class EpisodeAdapter(private val context: Context) : ListAdapter<EpisodeModel, E
                 val titleList = ArrayList<String>()
                 currentList.forEach()
                 {
-                    titleList.add(it.episode_id)
+                    titleList.add("$movieName ${it.episode_id}")
                 }
                 val i = Intent(context, VideoStreamingActivity::class.java)
                 i.putExtra("videopath", episode.episode_url)
-                i.putExtra("title", episode.episode_id)
+                i.putExtra("title", "$movieName ${episode.episode_id}")
                 i.putExtra("episodelist", episodeList)
                 i.putExtra("titlelist", titleList)
                 context.startActivity(i)

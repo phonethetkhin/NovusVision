@@ -37,7 +37,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        episodeAdapter = EpisodeAdapter(this)
+        episodeAdapter = EpisodeAdapter(this, bundle.movie_name)
         numberAdapter = NumberAdapter(this, seriesDetailViewModel)
         setVisibility()
         observeSeasonIds()

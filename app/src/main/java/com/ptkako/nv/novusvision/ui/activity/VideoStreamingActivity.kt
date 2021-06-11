@@ -13,16 +13,11 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.github.vkay94.dtpv.youtube.YouTubeOverlay
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.MediaItem
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.Player.MediaItemTransitionReason
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.util.Util
 import com.ptkako.nv.novusvision.R
@@ -38,9 +33,13 @@ class VideoStreamingActivity : AppCompatActivity() {
     private var currentWindow = 0
     var videoPath = ""
     var title = ""
+    var firstTime = true
+    var titlePosition = 0
     lateinit var exoProgress: ProgressBar
     lateinit var exoPlay: ImageButton
     lateinit var exoPause: ImageButton
+    lateinit var exoPrev: ImageButton
+    lateinit var exoNext: ImageButton
     lateinit var backArrow: ImageButton
     lateinit var titleText: TextView
     var episodeList: ArrayList<String>? = null
@@ -56,10 +55,25 @@ class VideoStreamingActivity : AppCompatActivity() {
         exoProgress = binding.exoPlayer.findViewById(R.id.exoBuffering)
         titleText = binding.exoPlayer.findViewById(R.id.exo_text)
         exoPause = binding.exoPlayer.findViewById(R.id.exoPause)
+        exoPrev = binding.exoPlayer.findViewById(R.id.exoPrev)
+        exoNext = binding.exoPlayer.findViewById(R.id.exoNext)
         exoPlay = binding.exoPlayer.findViewById(R.id.exoPLay)
         backArrow = binding.exoPlayer.findViewById(R.id.imbBackArrow)
         episodeList = intent.getStringArrayListExtra("episodelist")?.toCollection(ArrayList())
         titleList = intent.getStringArrayListExtra("titlelist")?.toCollection(ArrayList())
+        Log.d("sts", titlePosition.toString())
+
+        if (titleList != null) {
+            if (titleList!!.isNotEmpty()) {
+                titlePosition = titleList!!.indexOf(title)
+                Log.d("sts", titlePosition.toString())
+            }
+        }
+        if (titlePosition == 0) {
+            exoPrev.visibility = View.GONE
+        } else {
+            exoPrev.visibility = View.VISIBLE
+        }
         exoPause.setOnClickListener {
             playWhenReadyLiveData.postValue(false)
             exoPause.visibility = View.GONE
@@ -73,9 +87,29 @@ class VideoStreamingActivity : AppCompatActivity() {
         backArrow.setOnClickListener {
             super.onBackPressed()
         }
+        exoPrev.setOnClickListener {
+            titlePosition--
+            Log.d("sts", titlePosition.toString())
+            if (player != null) {
+                player!!.previous()
+                titleText.text = getTitleByPosition(titlePosition)
+            }
+        }
+        exoNext.setOnClickListener {
+            titlePosition++
+            Log.d("sts", titlePosition.toString())
+            if (player != null) {
+                player!!.next()
+                titleText.text = getTitleByPosition(titlePosition)
+            }
+        }
         Log.d("vd", videoPath)
         Log.d("vd", episodeList.toString())
 
+    }
+
+    private fun getTitleByPosition(position: Int): String {
+        return titleList!![position]
     }
 
     private fun hideUI() {
@@ -133,15 +167,7 @@ class VideoStreamingActivity : AppCompatActivity() {
                     {
                         player!!.addMediaItem(MediaItem.fromUri(it))
                     }
-                    val position = episodeList!!.indexOf(videoPath)
-                    player!!.moveMediaItem(position, 0)
-                }
-                if (titleList != null) {
-                    if (titleList!!.isNotEmpty()) {
-                        val position = titleList!!.indexOf(title)
-                        titleList!!.removeAt(position)
-                        titleList!!.add(0, title)
-                    }
+                    if (firstTime) currentWindow = episodeList!!.indexOf(videoPath)
                 }
                 titleText.text = title
             } else {
@@ -160,6 +186,7 @@ class VideoStreamingActivity : AppCompatActivity() {
             binding.doubleTapHandler.player(player!!)
             doubleTapListener()
         }
+        firstTime = false
     }
 
     private fun releasePlayer() {
@@ -176,6 +203,21 @@ class VideoStreamingActivity : AppCompatActivity() {
     }
 
     inner class PlaybackStateListener : Player.EventListener {
+        override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int) {
+            if (titlePosition == 0) {
+                exoPrev.visibility = View.GONE
+            } else {
+                exoPrev.visibility = View.VISIBLE
+            }
+            if (titleList != null) {
+                if (titlePosition == (titleList!!.size - 1)) {
+                    exoNext.visibility = View.GONE
+                } else {
+                    exoNext.visibility = View.VISIBLE
+                }
+            }
+        }
+
         override fun onPlaybackStateChanged(playbackState: Int) {
             when (playbackState) {
                 ExoPlayer.STATE_BUFFERING -> {
@@ -224,7 +266,6 @@ class VideoStreamingActivity : AppCompatActivity() {
                 }
             })
     }
-
 
 
 }
