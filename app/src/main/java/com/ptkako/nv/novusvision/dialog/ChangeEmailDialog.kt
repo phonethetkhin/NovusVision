@@ -13,7 +13,8 @@ import com.ptkako.nv.novusvision.listener.ChangeEmailListener
 import com.ptkako.nv.novusvision.utility.isEmailDataInvalid
 
 class ChangeEmailDialog(private val changeEmailListener: ChangeEmailListener) : DialogFragment() {
-    private lateinit var binding: DialogUpdateEmailLayoutBinding
+    private var _binding: DialogUpdateEmailLayoutBinding? = null
+    private val binding: DialogUpdateEmailLayoutBinding get() = _binding!!
 
     override fun onStart() {
         super.onStart()
@@ -27,7 +28,7 @@ class ChangeEmailDialog(private val changeEmailListener: ChangeEmailListener) : 
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = DialogUpdateEmailLayoutBinding.inflate(inflater, container, false)
+        _binding = DialogUpdateEmailLayoutBinding.inflate(inflater, container, false)
 
         binding.btnSubmit.setOnClickListener {
             val email = binding.tetChangeEmail.text.toString().trim()
@@ -55,5 +56,10 @@ class ChangeEmailDialog(private val changeEmailListener: ChangeEmailListener) : 
 
 
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

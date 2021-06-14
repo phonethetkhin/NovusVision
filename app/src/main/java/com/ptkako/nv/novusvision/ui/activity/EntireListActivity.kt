@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.ActivityEntireListBinding
+import com.ptkako.nv.novusvision.dialog.ChipDialog
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.EntireListViewModel
 import org.kodein.di.DIAware
@@ -53,6 +54,8 @@ class EntireListActivity : AppCompatActivity(), DIAware {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> super.onBackPressed()
+
+            R.id.menu_filter -> ChipDialog().show(supportFragmentManager, "Chip Dialog")
         }
         return super.onOptionsItemSelected(item)
     }
