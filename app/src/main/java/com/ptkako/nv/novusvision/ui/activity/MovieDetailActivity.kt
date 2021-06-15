@@ -6,13 +6,28 @@ import activityViewBinding
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.databinding.ActivityMovieDetailBinding
 import com.ptkako.nv.novusvision.model.MovieModel
+import com.ptkako.nv.novusvision.utility.kodeinViewModel
+import com.ptkako.nv.novusvision.utility.showToast
+import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
-class MovieDetailActivity : AppCompatActivity() {
+class MovieDetailActivity : AppCompatActivity(), DIAware {
+    override val di by closestDI()
+    var documentID = ""
+    private val movieDetailViewModel: MovieDetailViewModel by kodeinViewModel()
+    val firebaseAuth: FirebaseAuth by instance()
     private val binding by activityViewBinding(ActivityMovieDetailBinding::inflate)
     lateinit var bundle: MovieModel
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +39,7 @@ class MovieDetailActivity : AppCompatActivity() {
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         setBinding()
+        observeDocumentID()
     }
 
     private fun setBinding() = with(binding)
@@ -43,6 +59,22 @@ class MovieDetailActivity : AppCompatActivity() {
             intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
+        btnAddToPlaylist.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch{
+                val playlist = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid)
+                val existing = movieDetailViewModel.checkExisting(documentID, firebaseAuth.currentUser!!.uid)
+                Log.d("userdafsd", existing.toString())
+                Log.d("userdafsd", "$documentID, ${firebaseAuth.currentUser!!.uid}")
+                if (existing == null) {
+                    movieDetailViewModel.addPlayList(playlist)
+                } else {
+                    when (existing) {
+                        is Exception -> showToast(existing.localizedMessage)
+                        is String -> showToast("Already added to playlist")
+                    }
+                }
+            }
+        }
         txtMoviesTitle.text = bundle.movie_name
         txtContentRating.text = bundle.content_rating
         txtGenre.text = bundle.genres
@@ -53,6 +85,13 @@ class MovieDetailActivity : AppCompatActivity() {
         txtSubtitle.text = bundle.subtitle
         txtStarring.text = bundle.casts
         txtDescription.text = bundle.overview
+    }
+
+    private fun observeDocumentID() {
+        movieDetailViewModel.getDocumentIdLiveData(bundle.movie_name).observe(this@MovieDetailActivity, {
+            Log.d("user", it.toString())
+            documentID = it
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
