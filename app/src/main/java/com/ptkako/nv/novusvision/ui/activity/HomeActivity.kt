@@ -1,11 +1,13 @@
 package com.ptkako.nv.novusvision.ui.activity
 
 import activityViewBinding
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -41,6 +43,7 @@ class HomeActivity : AppCompatActivity(), DIAware {
         navController = navHostFragment.findNavController()
         supportActionBar!!.title = getString(R.string.app_name)
         settingDrawerToggle()
+        navListener()
         binding.tblHome.addOnTabSelectedListener(
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -51,6 +54,20 @@ class HomeActivity : AppCompatActivity(), DIAware {
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {}
             })
+    }
+
+    private fun navListener() {
+        binding.ngvHome.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_playlist -> {
+                    startActivity(Intent(this, PlayListActivity::class.java))
+                }
+                else -> {
+                    closeDrawer()
+                }
+            }
+            false
+        }
     }
 
     private fun tabSelected(position: Int) {
@@ -92,6 +109,18 @@ class HomeActivity : AppCompatActivity(), DIAware {
 
             binding.drlHome.addDrawerListener(toggle)
             toggle.syncState()
+        }
+    }
+
+    /**
+     * This method is about closing the drawer.
+     *
+     * @param drlHome (DrawerLayout)
+     */
+    private fun closeDrawer() {
+        if (binding.drlHome.isDrawerOpen(GravityCompat.START)) {
+            binding.drlHome.closeDrawer(GravityCompat.START)
+
         }
     }
 
