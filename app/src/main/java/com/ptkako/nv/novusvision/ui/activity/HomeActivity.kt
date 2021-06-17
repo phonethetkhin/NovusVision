@@ -4,6 +4,7 @@ import activityViewBinding
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,12 +14,14 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ActivityHomeBinding
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.viewmodel.HomeViewModel
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
 
 class HomeActivity : AppCompatActivity(), DIAware {
@@ -26,6 +29,7 @@ class HomeActivity : AppCompatActivity(), DIAware {
     private lateinit var toggle: ActionBarDrawerToggle
     private lateinit var navController: NavController
     private val homeViewModel: HomeViewModel by kodeinViewModel()
+    private val firebaseAuth: FirebaseAuth by instance()
     private val binding by activityViewBinding(ActivityHomeBinding::inflate)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +43,14 @@ class HomeActivity : AppCompatActivity(), DIAware {
                 binding.tblHome.getTabAt(it)!!.select()
             }
         })
+        val headerView = binding.ngvHome.getHeaderView(0)
+        Log.d("auth", firebaseAuth.currentUser?.uid.toString())
+
+        headerView.findViewById<TextView>(R.id.txtAccountGmail).text = firebaseAuth.currentUser!!.email
+        headerView.findViewById<TextView>(R.id.txtLogout).setOnClickListener {
+            firebaseAuth.signOut()
+            startActivity(Intent(this, AuthActivity::class.java))
+        }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fcvHomeNavHostFragment) as NavHostFragment
         navController = navHostFragment.findNavController()
         supportActionBar!!.title = getString(R.string.app_name)

@@ -1,5 +1,6 @@
 package com.ptkako.nv.novusvision.viewmodel
 
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,8 @@ import kotlinx.coroutines.launch
 
 class PlayListViewModel(private val repository: PlayListRepository) : ViewModel() {
     private lateinit var combinedListLiveData: MutableLiveData<ArrayList<CombinedModel>>
+    var pgbPlaylist = View.VISIBLE
+    var rcvPlaylist = View.GONE
 
     fun getPlayListLiveData(userId: String): LiveData<ArrayList<CombinedModel>> {
         if (!::combinedListLiveData.isInitialized) {

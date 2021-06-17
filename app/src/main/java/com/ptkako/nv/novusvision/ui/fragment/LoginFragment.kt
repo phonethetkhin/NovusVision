@@ -11,9 +11,7 @@ import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.FragmentLoginBinding
 import com.ptkako.nv.novusvision.dialog.ProgressDialogFragment
 import com.ptkako.nv.novusvision.ui.activity.HomeActivity
-import com.ptkako.nv.novusvision.utility.isEmailDataInvalid
-import com.ptkako.nv.novusvision.utility.kodeinViewModel
-import com.ptkako.nv.novusvision.utility.showToast
+import com.ptkako.nv.novusvision.utility.*
 import com.ptkako.nv.novusvision.viewmodel.AuthViewModel
 import fragmentViewBinding
 import org.kodein.di.DI
@@ -39,6 +37,8 @@ class LoginFragment : Fragment(R.layout.fragment_login), DIAware {
             when (it) {
                 is FirebaseUser -> {
                     if (it.isEmailVerified) {
+                        setStringPref(requireContext(), PREF_GMAIL, PREF_GMAIL, it.email!!)
+                        setStringPref(requireContext(), PREF_PASSWORD, PREF_PASSWORD, binding.tetLoginPassword.text.toString())
                         requireActivity().startActivity(Intent(activity, HomeActivity::class.java))
                         requireActivity().finish()
                     } else {

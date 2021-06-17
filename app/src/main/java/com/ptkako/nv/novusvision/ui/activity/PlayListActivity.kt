@@ -3,6 +3,7 @@ package com.ptkako.nv.novusvision.ui.activity
 import activityViewBinding
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.adapter.PlayListAdapter
@@ -31,9 +32,12 @@ class PlayListActivity : AppCompatActivity(), DIAware {
         playListAdapter = PlayListAdapter(this)
         binding.rcvPlaylist.setHasFixedSize(true)
         binding.rcvPlaylist.adapter = playListAdapter
+        setVisibility()
         playListViewModel.getPlayListLiveData(firebaseAuth.currentUser!!.uid).observe(this, {
             playListAdapter.submitList(it)
-
+            playListViewModel.pgbPlaylist = View.GONE
+            playListViewModel.rcvPlaylist = View.VISIBLE
+            setVisibility()
         })
     }
 
@@ -42,5 +46,10 @@ class PlayListActivity : AppCompatActivity(), DIAware {
             android.R.id.home -> super.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setVisibility() = with(binding) {
+        pgbPlaylist.visibility = playListViewModel.pgbPlaylist
+        rcvPlaylist.visibility = playListViewModel.rcvPlaylist
     }
 }

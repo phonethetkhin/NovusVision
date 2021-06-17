@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -13,6 +14,8 @@ import androidx.lifecycle.lifecycleScope
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.common.PERMISSION_REQUEST_CODE
 import com.ptkako.nv.novusvision.databinding.ActivitySplashBinding
+import com.ptkako.nv.novusvision.utility.PREF_GMAIL
+import com.ptkako.nv.novusvision.utility.getStringPref
 import com.ptkako.nv.novusvision.utility.showToast
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,8 +41,14 @@ class SplashActivity : AppCompatActivity() {
     private fun goToNextPage() {
         lifecycleScope.launch {
             delay(1000)
-            startActivity(Intent(this@SplashActivity, AuthActivity::class.java))
-            finish()
+            val gmail = getStringPref(this@SplashActivity, PREF_GMAIL, PREF_GMAIL, "")
+            if(gmail=="" || gmail == null) {
+                startActivity(Intent(this@SplashActivity, AuthActivity::class.java))
+                finish()
+            }else{
+                startActivity(Intent(this@SplashActivity, HomeActivity::class.java))
+                finish()
+            }
         }
     }
 

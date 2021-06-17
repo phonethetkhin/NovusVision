@@ -10,24 +10,35 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
 import com.ptkako.nv.novusvision.model.EpisodeModel
 import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
+import com.ptkako.nv.novusvision.utility.showToast
+import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
 import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
 class SeriesDetailActivity : AppCompatActivity(), DIAware {
     override val di: DI by closestDI()
     private val seriesDetailViewModel: SeriesDetailViewModel by kodeinViewModel()
+    private val movieDetailViewModel: MovieDetailViewModel by kodeinViewModel()
     private val binding by activityViewBinding(ActivitySeriesDetailBinding::inflate)
     private lateinit var episodeAdapter: EpisodeAdapter
     private lateinit var numberAdapter: NumberAdapter
+    val firebaseAuth: FirebaseAuth by instance()
     lateinit var bundle: SeriesModel
+    var documentID = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +53,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         setVisibility()
         observeSeasonIds()
         setBinding()
+        observeDocumentID()
 
     }
 
@@ -89,6 +101,22 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
             intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
+        btnAddToPlaylist.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                val playlist = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid)
+                val existing = movieDetailViewModel.checkExisting(documentID, firebaseAuth.currentUser!!.uid)
+                Log.d("userdafsd", existing.toString())
+                Log.d("userdafsd", "$documentID, ${firebaseAuth.currentUser!!.uid}")
+                if (existing == null) {
+                    movieDetailViewModel.addPlayList(playlist)
+                } else {
+                    when (existing) {
+                        is Exception -> showToast(existing.localizedMessage)
+                        is String -> showToast("Already added to playlist")
+                    }
+                }
+            }
+        }
         txtMoviesTitle.text = bundle.movie_name
         txtContentRating.text = bundle.content_rating
         txtGenre.text = bundle.genres
@@ -118,4 +146,10 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         nsvSeriesDetail.visibility = seriesDetailViewModel.nsvSeriesDetail
     }
 
+    private fun observeDocumentID() {
+        movieDetailViewModel.getDocumentIdLiveData(bundle.movie_name).observe(this@SeriesDetailActivity, {
+            Log.d("user", it.toString())
+            documentID = it
+        })
+    }
 }
