@@ -14,8 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
+import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.model.EpisodeModel
-import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.utility.showToast
 import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
@@ -36,7 +36,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
     private lateinit var episodeAdapter: EpisodeAdapter
     private lateinit var numberAdapter: NumberAdapter
     val firebaseAuth: FirebaseAuth by instance()
-    lateinit var bundle: SeriesModel
+    lateinit var bundle: MovieModel
     var documentID = ""
 
 
@@ -44,7 +44,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include3.tlbToolbar)
-        bundle = intent.getParcelableExtra<SeriesModel>("series")!!
+        bundle = intent.getParcelableExtra("series")!!
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

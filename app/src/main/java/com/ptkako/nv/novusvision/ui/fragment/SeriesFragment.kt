@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.ptkako.nv.novusvision.R
-import com.ptkako.nv.novusvision.adapter.SeriesAdapter
+import com.ptkako.nv.novusvision.adapter.MoviesAdapter
 import com.ptkako.nv.novusvision.databinding.FragmentSeriesBinding
 import com.ptkako.nv.novusvision.ui.activity.EntireListActivity
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
@@ -18,16 +18,16 @@ import org.kodein.di.android.x.closestDI
 class SeriesFragment : Fragment(R.layout.fragment_series), DIAware {
     override val di: DI by closestDI()
     private val homeViewModel: HomeViewModel by kodeinViewModel()
-    private lateinit var seriesPopularAdapter: SeriesAdapter
-    private lateinit var seriesNewAdapter: SeriesAdapter
-    private lateinit var seriesAllAdapter: SeriesAdapter
+    private lateinit var seriesPopularAdapter: MoviesAdapter
+    private lateinit var seriesNewAdapter: MoviesAdapter
+    private lateinit var seriesAllAdapter: MoviesAdapter
     private val binding by fragmentViewBinding(FragmentSeriesBinding::bind)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        seriesPopularAdapter = SeriesAdapter(requireContext())
-        seriesNewAdapter = SeriesAdapter(requireContext())
-        seriesAllAdapter = SeriesAdapter(requireContext())
+        seriesPopularAdapter = MoviesAdapter(requireContext())
+        seriesNewAdapter = MoviesAdapter(requireContext())
+        seriesAllAdapter = MoviesAdapter(requireContext())
         setVisibility()
         observeSeries()
         setBinding()

@@ -11,21 +11,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.databinding.ListItemEpisodeBinding
-import com.ptkako.nv.novusvision.model.CombinedModel
 import com.ptkako.nv.novusvision.model.MovieModel
-import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
 import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
-class PlayListAdapter(private val context: Context) : ListAdapter<CombinedModel, PlayListAdapter.PlayListViewHolder>(diffCallback) {
+class PlayListAdapter(private val context: Context) : ListAdapter<MovieModel, PlayListAdapter.PlayListViewHolder>(diffCallback) {
 
     companion object {
-        val diffCallback = object : DiffUtil.ItemCallback<CombinedModel>() {
-            override fun areItemsTheSame(oldItem: CombinedModel, newItem: CombinedModel): Boolean {
+        val diffCallback = object : DiffUtil.ItemCallback<MovieModel>() {
+            override fun areItemsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areContentsTheSame(oldItem: CombinedModel, newItem: CombinedModel): Boolean {
+            override fun areContentsTheSame(oldItem: MovieModel, newItem: MovieModel): Boolean {
                 return oldItem == newItem
             }
 
@@ -48,26 +46,13 @@ class PlayListAdapter(private val context: Context) : ListAdapter<CombinedModel,
                 if (playListItem.series_id == null) {
                     val i = Intent(context, MovieDetailActivity::class.java)
                     val b = Bundle()
-                    val movieModel = MovieModel(playListItem.casts, playListItem.content_rating,
-                        playListItem.country, playListItem.duration, playListItem.full_video_path!!,
-                        playListItem.genres, playListItem.is_series, playListItem.language,
-                        playListItem.movie_cover_photo, playListItem.movie_name, playListItem.movie_photo,
-                        playListItem.overview, playListItem.popularity, playListItem.production_year,
-                        playListItem.subtitle, playListItem.status_code, playListItem.trailer_video_path)
-
-                    b.putParcelable("movie", movieModel)
+                    b.putParcelable("movie", playListItem)
                     i.putExtras(b)
                     context.startActivity(i)
                 } else {
                     val i = Intent(context, SeriesDetailActivity::class.java)
                     val b = Bundle()
-                    val seriesModel = SeriesModel(playListItem.casts, playListItem.content_rating,
-                        playListItem.country, playListItem.duration, playListItem.genres,
-                        playListItem.is_series, playListItem.language, playListItem.movie_cover_photo,
-                        playListItem.movie_name, playListItem.movie_photo, playListItem.overview,
-                        playListItem.popularity, playListItem.production_year,
-                        playListItem.series_id, playListItem.status_code, playListItem.trailer_video_path)
-                    b.putParcelable("series", seriesModel)
+                    b.putParcelable("series", playListItem)
                     i.putExtras(b)
                     context.startActivity(i)
                 }

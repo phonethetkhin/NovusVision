@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -14,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.ptkako.nv.novusvision.databinding.ListItemMoviesBinding
 import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.ui.activity.MovieDetailActivity
+import com.ptkako.nv.novusvision.ui.activity.SeriesDetailActivity
 
 class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, MoviesAdapter.MoviesViewHolder>(diffCallback) {
     companion object {
@@ -50,11 +50,20 @@ class MoviesAdapter(private val context: Context) : ListAdapter<MovieModel, Movi
 
             Glide.with(context).load(movie.movie_photo).into(binding.imgMoviesImage)
             binding.imgMoviesImage.setOnClickListener {
-                val i = Intent(context, MovieDetailActivity::class.java)
-                val b = Bundle()
-                b.putParcelable("movie", movie)
-                i.putExtras(b)
-                context.startActivity(i)
+                if(movie.series_id == null) {
+                    val i = Intent(context, MovieDetailActivity::class.java)
+                    val b = Bundle()
+                    b.putParcelable("movie", movie)
+                    i.putExtras(b)
+                    context.startActivity(i)
+                }
+                else{
+                    val i = Intent(context, SeriesDetailActivity::class.java)
+                    val b = Bundle()
+                    b.putParcelable("series", movie)
+                    i.putExtras(b)
+                    context.startActivity(i)
+                }
             }
             binding.txtMoviesTitle.text = movie.movie_name
         }

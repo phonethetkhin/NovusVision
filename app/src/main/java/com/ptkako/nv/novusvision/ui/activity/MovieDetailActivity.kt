@@ -34,7 +34,7 @@ class MovieDetailActivity : AppCompatActivity(), DIAware {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.include2.tlbToolbar)
-        bundle = intent.getParcelableExtra<MovieModel>("movie")!!
+        bundle = intent.getParcelableExtra("movie")!!
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)

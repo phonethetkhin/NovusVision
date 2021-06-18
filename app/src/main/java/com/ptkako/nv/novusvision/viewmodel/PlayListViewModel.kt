@@ -5,26 +5,26 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ptkako.nv.novusvision.model.CombinedModel
+import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.repository.PlayListRepository
 import kotlinx.coroutines.launch
 
 class PlayListViewModel(private val repository: PlayListRepository) : ViewModel() {
-    private lateinit var combinedListLiveData: MutableLiveData<ArrayList<CombinedModel>>
+    private lateinit var movieListLiveData: MutableLiveData<ArrayList<MovieModel>>
     var pgbPlaylist = View.VISIBLE
     var rcvPlaylist = View.GONE
 
-    fun getPlayListLiveData(userId: String): LiveData<ArrayList<CombinedModel>> {
-        if (!::combinedListLiveData.isInitialized) {
-            combinedListLiveData = MutableLiveData<ArrayList<CombinedModel>>()
+    fun getPlayListLiveData(userId: String): LiveData<ArrayList<MovieModel>> {
+        if (!::movieListLiveData.isInitialized) {
+            movieListLiveData = MutableLiveData<ArrayList<MovieModel>>()
             getPlayList(userId)
         }
-        return combinedListLiveData
+        return movieListLiveData
     }
 
     private fun getPlayList(userId: String) {
         viewModelScope.launch {
-            combinedListLiveData.postValue(repository.getPlaylistByUser(userId))
+            movieListLiveData.postValue(repository.getPlaylistByUser(userId))
         }
     }
 

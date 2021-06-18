@@ -8,10 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.ptkako.nv.novusvision.model.MovieModel
-import com.ptkako.nv.novusvision.model.SeriesModel
 import com.ptkako.nv.novusvision.repository.HomeRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -20,9 +18,15 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     lateinit var tabPositionLiveData: MutableLiveData<Int>
 
     //HomeFragmentVariables
-    private lateinit var popularHomeList: ArrayList<MovieModel>
-    private lateinit var newHomeList: ArrayList<MovieModel>
-    private lateinit var allHomeList: ArrayList<MovieModel>
+    private lateinit var popularHomeMovie: ArrayList<MovieModel>
+    private lateinit var popularHomeSeries: ArrayList<MovieModel>
+    private var popularHomeList = ArrayList<MovieModel>()
+    private lateinit var newHomeMovie: ArrayList<MovieModel>
+    private lateinit var newHomeSeries: ArrayList<MovieModel>
+    private var newHomeList = ArrayList<MovieModel>()
+    private lateinit var allHomeMovie: ArrayList<MovieModel>
+    private lateinit var allHomeSeries: ArrayList<MovieModel>
+    private var allHomeList = ArrayList<MovieModel>()
     private lateinit var homeListLiveData: MutableLiveData<ArrayList<ArrayList<MovieModel>>>
     var pgbHome = View.VISIBLE
     var nsvHome = View.GONE
@@ -36,10 +40,10 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     var nsvMovie = View.GONE
 
     //seriesFragmentVariables
-    private lateinit var popularSeriesList: ArrayList<SeriesModel>
-    private lateinit var newSeriesList: ArrayList<SeriesModel>
-    private lateinit var allSeriesList: ArrayList<SeriesModel>
-    private lateinit var seriesListLiveData: MutableLiveData<ArrayList<ArrayList<SeriesModel>>>
+    private lateinit var popularSeriesList: ArrayList<MovieModel>
+    private lateinit var newSeriesList: ArrayList<MovieModel>
+    private lateinit var allSeriesList: ArrayList<MovieModel>
+    private lateinit var seriesListLiveData: MutableLiveData<ArrayList<ArrayList<MovieModel>>>
     var pgbSeries = View.VISIBLE
     var nsvSeries = View.GONE
 
@@ -70,9 +74,21 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
 
     fun getHomeList(srlHome: SwipeRefreshLayout?) {
         viewModelScope.launch {
-            popularHomeList = withContext(Dispatchers.IO) { repository.getMovieList("P") }
-            newHomeList = withContext(Dispatchers.IO) { repository.getMovieList("N") }
-            allHomeList = withContext(Dispatchers.IO) { repository.getMovieList(null) }
+            popularHomeMovie = withContext(Dispatchers.IO) { repository.getMovieList("P") }
+            popularHomeSeries = withContext(Dispatchers.IO) { repository.getSeriesList("P") }
+            popularHomeList.addAll(popularHomeMovie)
+            popularHomeList.addAll(popularHomeSeries)
+
+            newHomeMovie = withContext(Dispatchers.IO) { repository.getMovieList("N") }
+            newHomeSeries = withContext(Dispatchers.IO) { repository.getSeriesList("N") }
+            newHomeList.addAll(newHomeMovie)
+            newHomeList.addAll(newHomeSeries)
+
+            allHomeMovie = withContext(Dispatchers.IO) { repository.getMovieList(null) }
+            allHomeSeries = withContext(Dispatchers.IO) { repository.getSeriesList(null) }
+            allHomeList.addAll(allHomeMovie)
+            allHomeList.addAll(allHomeSeries)
+
             homeListLiveData.postValue(arrayListOf(popularHomeList, newHomeList, allHomeList))
 
             pgbHome = View.GONE
@@ -111,15 +127,15 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
     }
 
     //series--------------------------------------------------------------------------------------//
-    fun getSeriesListLiveData(): LiveData<ArrayList<ArrayList<SeriesModel>>> {
+    fun getSeriesListLiveData(): LiveData<ArrayList<ArrayList<MovieModel>>> {
         if (!::seriesListLiveData.isInitialized) {
-            seriesListLiveData = MutableLiveData<ArrayList<ArrayList<SeriesModel>>>()
+            seriesListLiveData = MutableLiveData<ArrayList<ArrayList<MovieModel>>>()
             getSeriesList(null)
         }
         return seriesListLiveData
     }
 
-    fun getSeriesList(srlSeries:SwipeRefreshLayout?) {
+    fun getSeriesList(srlSeries: SwipeRefreshLayout?) {
         viewModelScope.launch {
             popularSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("P") }
             newSeriesList = withContext(Dispatchers.IO) { repository.getSeriesList("N") }
@@ -128,8 +144,7 @@ class HomeViewModel(private val repository: HomeRepository) : ViewModel() {
             seriesListLiveData.postValue(arrayListOf(popularSeriesList, newSeriesList, allSeriesList))
             pgbSeries = View.GONE
             nsvSeries = View.VISIBLE
-            if(srlSeries!=null)
-            {
+            if (srlSeries != null) {
                 srlSeries.isRefreshing = false
             }
         }

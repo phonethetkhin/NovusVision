@@ -6,7 +6,7 @@ import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-import com.ptkako.nv.novusvision.model.CombinedModel
+import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.model.PlaylistModel
 import com.ptkako.nv.novusvision.utility.showToast
 import kotlinx.coroutines.Dispatchers
@@ -14,9 +14,9 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 class PlayListRepository(private val context: Context, private val fireStore: FirebaseFirestore) {
-    suspend fun getPlaylistByUser(userId: String): ArrayList<CombinedModel> {
+    suspend fun getPlaylistByUser(userId: String): ArrayList<MovieModel> {
         Log.d("playlistSequence", "1")
-        val playlist = ArrayList<CombinedModel>()
+        val playlist = ArrayList<MovieModel>()
         Log.d("playlistSequence", "2")
 
         val docRef = fireStore.collection("Playlist").whereEqualTo("user_id", userId).get()
@@ -47,10 +47,10 @@ class PlayListRepository(private val context: Context, private val fireStore: Fi
         return playlist
     }
 
-    suspend fun getMovieByMovieId(movieId: String): CombinedModel? {
+    suspend fun getMovieByMovieId(movieId: String): MovieModel? {
         Log.d("playlistSequence", "6")
 
-        var combinedModel: CombinedModel? = null
+        var movieModel: MovieModel? = null
         val docRef = fireStore.collection("Movie").document(movieId).get()
         docRef.await()
         Log.d("playlistSequence", "7")
@@ -58,7 +58,7 @@ class PlayListRepository(private val context: Context, private val fireStore: Fi
         if (docRef.isSuccessful) {
             Log.d("playlistSequence", "8")
 
-            combinedModel = docRef.result!!.toObject<CombinedModel>()
+            movieModel = docRef.result!!.toObject<MovieModel>()
         } else {
             Log.d("playlistSequence", "8else")
 
@@ -66,6 +66,6 @@ class PlayListRepository(private val context: Context, private val fireStore: Fi
         }
         Log.d("playlistSequence", "9")
 
-        return combinedModel
+        return movieModel
     }
 }
