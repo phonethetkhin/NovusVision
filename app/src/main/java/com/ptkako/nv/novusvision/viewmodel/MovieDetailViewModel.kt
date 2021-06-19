@@ -32,8 +32,16 @@ class MovieDetailViewModel(private val repository: MovieDetailRepository) : View
         repository.addPlaylist(playlist)
     }
 
-    suspend fun checkExisting(movieId: String, userId: String): Any? {
+    fun addHistory(history: HashMap<String, String>) = viewModelScope.launch {
+        repository.addToHistory(history)
+    }
+
+    suspend fun checkExistingPlaylist(movieId: String, userId: String): Any? {
         return repository.checkExistingPlaylist(movieId, userId)
+    }
+
+    suspend fun checkExistingHistory(movieId: String, userId: String, lastPlayedTime: String, finish: String): Any? {
+        return repository.checkExistingHistory(movieId, userId, lastPlayedTime, finish)
     }
 
 }

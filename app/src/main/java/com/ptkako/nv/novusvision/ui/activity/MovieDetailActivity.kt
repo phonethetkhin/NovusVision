@@ -13,6 +13,8 @@ import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.databinding.ActivityMovieDetailBinding
 import com.ptkako.nv.novusvision.model.MovieModel
+import com.ptkako.nv.novusvision.utility.getDate
+import com.ptkako.nv.novusvision.utility.getDateString
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.utility.showToast
 import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
@@ -22,6 +24,7 @@ import kotlinx.coroutines.launch
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
 import org.kodein.di.instance
+import java.util.*
 
 class MovieDetailActivity : AppCompatActivity(), DIAware {
     override val di by closestDI()
@@ -47,10 +50,20 @@ class MovieDetailActivity : AppCompatActivity(), DIAware {
         Glide.with(this@MovieDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
         Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
         imgMovieCover.setOnClickListener {
-            val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
-            intent.putExtra("videopath", bundle.full_video_path)
-            intent.putExtra("title", bundle.movie_name)
-            startActivity(intent)
+            CoroutineScope(Dispatchers.Main).launch {
+                val history = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid,
+                    "last_played_time" to "00:00", "finish" to "0", "last_watch" to getDateString(getDate(),
+                        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "dd-MMM-yyyy hh:mm:ss aaa"))
+                val existing = movieDetailViewModel.checkExistingHistory(documentID, firebaseAuth.currentUser!!.uid,
+                    "00:00", "0")
+                if (existing == null) {
+                    movieDetailViewModel.addHistory(history)
+                }
+                val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
+                intent.putExtra("videopath", bundle.full_video_path)
+                intent.putExtra("title", bundle.movie_name)
+                startActivity(intent)
+            }
         }
 
         btnTrailer.setOnClickListener {
@@ -60,9 +73,9 @@ class MovieDetailActivity : AppCompatActivity(), DIAware {
             startActivity(intent)
         }
         btnAddToPlaylist.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.Main).launch {
                 val playlist = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid)
-                val existing = movieDetailViewModel.checkExisting(documentID, firebaseAuth.currentUser!!.uid)
+                val existing = movieDetailViewModel.checkExistingPlaylist(documentID, firebaseAuth.currentUser!!.uid)
                 Log.d("userdafsd", existing.toString())
                 Log.d("userdafsd", "$documentID, ${firebaseAuth.currentUser!!.uid}")
                 if (existing == null) {

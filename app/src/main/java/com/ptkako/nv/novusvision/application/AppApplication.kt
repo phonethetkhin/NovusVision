@@ -26,6 +26,7 @@ class AppApplication : Application(), DIAware {
         bindSingleton { SeriesDetailRepository(instance(), instance()) }
         bindSingleton { MovieDetailRepository(instance(), instance()) }
         bindSingleton { PlayListRepository(instance(), instance()) }
+        bindSingleton { HistoryRepository(instance(), instance()) }
 
         bind<AuthViewModel>(AuthViewModel::class.java.simpleName) with provider { AuthViewModel(instance()) }
         bind<HomeViewModel>(HomeViewModel::class.java.simpleName) with provider { HomeViewModel(instance()) }
@@ -33,6 +34,7 @@ class AppApplication : Application(), DIAware {
         bind<MovieDetailViewModel>(MovieDetailViewModel::class.java.simpleName) with provider { MovieDetailViewModel(instance()) }
         bind<EntireListViewModel>(EntireListViewModel::class.java.simpleName) with provider { EntireListViewModel(instance()) }
         bind<PlayListViewModel>(PlayListViewModel::class.java.simpleName) with provider { PlayListViewModel(instance()) }
+        bind<HistoryViewModel>(HistoryViewModel::class.java.simpleName) with provider { HistoryViewModel(instance()) }
 
 
     }

@@ -74,6 +74,9 @@ class HomeActivity : AppCompatActivity(), DIAware {
                 R.id.nav_playlist -> {
                     startActivity(Intent(this, PlayListActivity::class.java))
                 }
+                R.id.nav_history -> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                }
                 else -> {
                     closeDrawer()
                 }

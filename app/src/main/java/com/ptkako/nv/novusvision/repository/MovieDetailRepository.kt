@@ -8,9 +8,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.utility.runOnIO
 import com.ptkako.nv.novusvision.utility.runOnMain
 import com.ptkako.nv.novusvision.utility.showToast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class MovieDetailRepository(private val context: Context, private val fireStore: FirebaseFirestore) {
@@ -45,22 +42,53 @@ class MovieDetailRepository(private val context: Context, private val fireStore:
         }
     }
 
-   suspend fun checkExistingPlaylist(movieId: String, userId: String): Any? {
+    suspend fun checkExistingPlaylist(movieId: String, userId: String): Any? {
         var existing: Any? = null
-            val result = fireStore.collection("Playlist").whereEqualTo("movie_id", movieId)
-                .whereEqualTo("user_id", userId).get()
-            result.await()
-            if (result.isSuccessful) {
-                val resultList = result.result!!.documents
-                Log.d("resultlist", resultList.size.toString())
-                if (resultList.isNotEmpty()) {
-                    Log.d("resultlist", "Not Empty")
-                    existing = result.result!!.documents[0].reference.id
-                    Log.d("resultlist", "$existing")
-                }
-            } else {
-                existing = result.exception!!
+        val result = fireStore.collection("Playlist").whereEqualTo("movie_id", movieId)
+            .whereEqualTo("user_id", userId).get()
+        result.await()
+        if (result.isSuccessful) {
+            val resultList = result.result!!.documents
+            Log.d("resultlist", resultList.size.toString())
+            if (resultList.isNotEmpty()) {
+                Log.d("resultlist", "Not Empty")
+                existing = result.result!!.documents[0].reference.id
+                Log.d("resultlist", "$existing")
             }
+        } else {
+            existing = result.exception!!
+        }
+        return existing
+    }
+
+    suspend fun addToHistory(history: HashMap<String, String>) {
+        runOnIO {
+            try {
+                val result = fireStore.collection("History").add(history)
+                result.await()
+            } catch (e: Exception) {
+                runOnMain { context.showToast(e.localizedMessage) }
+            }
+        }
+    }
+
+    suspend fun checkExistingHistory(movieId: String, userId: String, lastPlayedTime: String, finish: String): Any? {
+        var existing: Any? = null
+        val result = fireStore.collection("History").whereEqualTo("movie_id", movieId)
+            .whereEqualTo("user_id", userId).whereEqualTo("last_played_time", lastPlayedTime)
+            .whereEqualTo("finish", finish).get()
+        result.await()
+        if (result.isSuccessful) {
+            val resultList = result.result!!.documents
+            Log.d("resultlist", resultList.size.toString())
+            if (resultList.isNotEmpty()) {
+                Log.d("resultlist", "Not Empty")
+                existing = result.result!!.documents[0].reference.id
+                Log.d("resultlist", "$existing")
+            }
+        } else {
+            existing = result.exception!!
+        }
         return existing
     }
 }

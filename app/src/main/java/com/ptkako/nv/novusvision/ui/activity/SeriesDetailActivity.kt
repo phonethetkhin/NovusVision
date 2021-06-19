@@ -104,7 +104,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         btnAddToPlaylist.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 val playlist = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid)
-                val existing = movieDetailViewModel.checkExisting(documentID, firebaseAuth.currentUser!!.uid)
+                val existing = movieDetailViewModel.checkExistingPlaylist(documentID, firebaseAuth.currentUser!!.uid)
                 Log.d("userdafsd", existing.toString())
                 Log.d("userdafsd", "$documentID, ${firebaseAuth.currentUser!!.uid}")
                 if (existing == null) {
