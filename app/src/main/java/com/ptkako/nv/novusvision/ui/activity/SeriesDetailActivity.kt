@@ -14,8 +14,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.ptkako.nv.novusvision.adapter.EpisodeAdapter
 import com.ptkako.nv.novusvision.adapter.NumberAdapter
 import com.ptkako.nv.novusvision.databinding.ActivitySeriesDetailBinding
-import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.model.EpisodeModel
+import com.ptkako.nv.novusvision.model.MovieModel
 import com.ptkako.nv.novusvision.utility.kodeinViewModel
 import com.ptkako.nv.novusvision.utility.showToast
 import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
@@ -23,6 +23,7 @@ import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
@@ -48,13 +49,11 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        episodeAdapter = EpisodeAdapter(this, bundle.movie_name)
-        numberAdapter = NumberAdapter(this, seriesDetailViewModel)
-        setVisibility()
-        observeSeasonIds()
-        setBinding()
-        observeDocumentID()
-
+            observeDocumentID()
+            numberAdapter = NumberAdapter(this@SeriesDetailActivity, seriesDetailViewModel)
+            setVisibility()
+            observeSeasonIds()
+            setBinding()
     }
 
     private fun observeSeasonIds() {
@@ -129,7 +128,6 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         txtDescription.text = bundle.overview
 
         rcvEpisode.setHasFixedSize(true)
-        rcvEpisode.adapter = episodeAdapter
         binding.rcvSeasonNumber.setHasFixedSize(true)
         binding.rcvSeasonNumber.adapter = numberAdapter
     }
@@ -150,6 +148,10 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         movieDetailViewModel.getDocumentIdLiveData(bundle.movie_name).observe(this@SeriesDetailActivity, {
             Log.d("user", it.toString())
             documentID = it
+            episodeAdapter = EpisodeAdapter(this@SeriesDetailActivity, bundle.movie_name, it, firebaseAuth, movieDetailViewModel)
+            binding.rcvEpisode.adapter = episodeAdapter
+
+
         })
     }
 }
