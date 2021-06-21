@@ -36,7 +36,11 @@ class LoginFragment : Fragment(R.layout.fragment_login), DIAware {
             }
             when (it) {
                 is FirebaseUser -> {
-                    if (it.isEmailVerified) {
+                    setStringPref(requireContext(), PREF_GMAIL, PREF_GMAIL, it.email!!)
+                    setStringPref(requireContext(), PREF_PASSWORD, PREF_PASSWORD, binding.tetLoginPassword.text.toString())
+                    requireActivity().startActivity(Intent(activity, HomeActivity::class.java))
+                    requireActivity().finish()
+                  /*  if (it.isEmailVerified) {
                         setStringPref(requireContext(), PREF_GMAIL, PREF_GMAIL, it.email!!)
                         setStringPref(requireContext(), PREF_PASSWORD, PREF_PASSWORD, binding.tetLoginPassword.text.toString())
                         requireActivity().startActivity(Intent(activity, HomeActivity::class.java))
@@ -44,7 +48,7 @@ class LoginFragment : Fragment(R.layout.fragment_login), DIAware {
                     } else {
                         requireActivity().showToast(getString(R.string.please_verify_your_email))
                         viewModel.userLoginLivedata.value = null
-                    }
+                    }*/
                 }
 
                 is String -> {

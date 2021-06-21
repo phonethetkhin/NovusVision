@@ -3,11 +3,16 @@ package com.ptkako.nv.novusvision.dialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.*
-import androidx.core.view.allViews
+import androidx.core.view.get
 import androidx.fragment.app.DialogFragment
+import com.google.android.material.chip.Chip
 import com.ptkako.nv.novusvision.databinding.DialogChipLayoutBinding
+import com.ptkako.nv.novusvision.viewmodel.EntireListViewModel
 
-class ChipDialog : DialogFragment() {
+class ChipDialog(
+    private val viewModel: EntireListViewModel,
+    private val setChip:()-> Unit
+) : DialogFragment() {
     private var _binding: DialogChipLayoutBinding? = null
     private val binding: DialogChipLayoutBinding get() = _binding!!
 
@@ -30,13 +35,25 @@ class ChipDialog : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DialogChipLayoutBinding.inflate(inflater, container, false)
-        binding.btnOk.setOnClickListener {
-            dismiss()
+
+        val chipCount = binding.chgEntireList.childCount
+        for (c in 0 until chipCount) {
+            val chip = binding.chgEntireList.get(c) as Chip
+            if (viewModel.chipTextList.contains(chip.text.toString())) {
+                chip.isChecked = true
+            }
         }
 
-        val chip = binding.chgEntireList.allViews
-
-        chip.forEach {
+        binding.btnOk.setOnClickListener {
+            viewModel.chipTextList.clear()
+            for (c in 0 until chipCount) {
+                val chip = binding.chgEntireList.get(c) as Chip
+                if (chip.isChecked) {
+                    viewModel.chipTextList.add(chip.text.toString())
+                }
+            }
+            dismiss()
+            setChip.invoke()
         }
 
         return binding.root

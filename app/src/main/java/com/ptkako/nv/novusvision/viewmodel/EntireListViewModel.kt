@@ -12,7 +12,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class EntireListViewModel(private val repository: HomeRepository) : ViewModel() {
-    private lateinit var moviesListLiveData: MutableLiveData<ArrayList<MovieModel>>
+    lateinit var moviesListLiveData: MutableLiveData<ArrayList<MovieModel>>
+    val chipTextList = ArrayList<String>()
 
     var pgbEntire = View.VISIBLE
 
