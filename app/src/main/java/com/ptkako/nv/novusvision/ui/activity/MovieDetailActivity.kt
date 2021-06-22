@@ -50,25 +50,17 @@ class MovieDetailActivity : AppCompatActivity(), DIAware {
         Glide.with(this@MovieDetailActivity).load(bundle.movie_cover_photo).into(binding.imgMovieCover)
         Glide.with(this@MovieDetailActivity).load(bundle.movie_photo).into(binding.imgMoviePhoto)
         imgMovieCover.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                val history = hashMapOf("movie_id" to documentID, "user_id" to firebaseAuth.currentUser!!.uid,
-                    "last_played_time" to "00:00", "finish" to "0", "last_watch" to getDateString(getDate(),
-                        "yyyy-MM-dd'T'HH:mm:ss.SSSZ", "dd-MMM-yyyy hh:mm:ss aaa"))
-                val existing = movieDetailViewModel.checkExistingHistory(documentID, firebaseAuth.currentUser!!.uid,
-                    "00:00", "0")
-                if (existing == null) {
-                    movieDetailViewModel.addHistory(history)
-                }
                 val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
                 intent.putExtra("videopath", bundle.full_video_path)
+                intent.putExtra("documentid",documentID)
                 intent.putExtra("title", bundle.movie_name)
                 startActivity(intent)
-            }
         }
 
         btnTrailer.setOnClickListener {
             val intent = Intent(this@MovieDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("documentid",documentID)
             intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }

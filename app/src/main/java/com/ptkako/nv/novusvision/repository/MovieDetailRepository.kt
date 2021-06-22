@@ -61,7 +61,7 @@ class MovieDetailRepository(private val context: Context, private val fireStore:
         return existing
     }
 
-    suspend fun addToHistory(history: HashMap<String, String>) {
+    suspend fun addToHistory(history: HashMap<String, Any>) {
         runOnIO {
             try {
                 val result = fireStore.collection("History").add(history)
@@ -72,11 +72,24 @@ class MovieDetailRepository(private val context: Context, private val fireStore:
         }
     }
 
-    suspend fun checkExistingHistory(movieId: String, userId: String, lastPlayedTime: String, finish: String): Any? {
+    suspend fun updateHistory(historyId: String, lastWatch: String, lastPlayedTime: String) {
+        runOnIO {
+            try {
+                Log.d("upd", historyId)
+                Log.d("upd", lastWatch)
+                Log.d("upd", lastPlayedTime)
+                val result = fireStore.collection("History").document(historyId).update("last_watch", lastWatch, "last_played_time", lastPlayedTime)
+                result.await()
+            } catch (e: Exception) {
+                runOnMain { context.showToast(e.localizedMessage) }
+            }
+        }
+    }
+
+    suspend fun checkExistingHistory(movieId: String, userId: String): Any? {
         var existing: Any? = null
         val result = fireStore.collection("History").whereEqualTo("movie_id", movieId)
-            .whereEqualTo("user_id", userId).whereEqualTo("last_played_time", lastPlayedTime)
-            .whereEqualTo("finish", finish).get()
+            .whereEqualTo("user_id", userId).get()
         result.await()
         if (result.isSuccessful) {
             val resultList = result.result!!.documents

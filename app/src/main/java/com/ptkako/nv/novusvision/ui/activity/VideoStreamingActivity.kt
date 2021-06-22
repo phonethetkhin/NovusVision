@@ -20,12 +20,23 @@ import com.github.vkay94.dtpv.youtube.YouTubeOverlay
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.util.Util
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.ptkako.nv.novusvision.R
 import com.ptkako.nv.novusvision.databinding.ActivityVideoStreamingBinding
-import com.ptkako.nv.novusvision.utility.showToast
+import com.ptkako.nv.novusvision.utility.*
+import com.ptkako.nv.novusvision.viewmodel.MovieDetailViewModel
+import kotlinx.coroutines.*
+import org.kodein.di.DIAware
+import org.kodein.di.android.closestDI
+import org.kodein.di.instance
 
 
-class VideoStreamingActivity : AppCompatActivity() {
+class VideoStreamingActivity : AppCompatActivity(), DIAware {
+    override val di by closestDI()
+    val firebaseFirestore: FirebaseFirestore by instance()
+    val firebaseAuth: FirebaseAuth by instance()
+
     private var player: SimpleExoPlayer? = null
     private var playWhenReadyLiveData = MutableLiveData(true)
     private var playbackPosition: Long = 0
@@ -33,6 +44,7 @@ class VideoStreamingActivity : AppCompatActivity() {
     private var currentWindow = 0
     var videoPath = ""
     var title = ""
+    var documentId = ""
     var firstTime = true
     var titlePosition = 0
     lateinit var exoProgress: ProgressBar
@@ -44,6 +56,7 @@ class VideoStreamingActivity : AppCompatActivity() {
     lateinit var titleText: TextView
     var episodeList: ArrayList<String>? = null
     var titleList: ArrayList<String>? = null
+    private val movieDetailViewModel: MovieDetailViewModel by kodeinViewModel()
     private val binding by activityViewBinding(ActivityVideoStreamingBinding::inflate)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +65,7 @@ class VideoStreamingActivity : AppCompatActivity() {
         playbackStateListener = PlaybackStateListener()
         videoPath = intent.getStringExtra("videopath")!!
         title = intent.getStringExtra("title")!!
+        documentId = intent.getStringExtra("documentid")!!
         exoProgress = binding.exoPlayer.findViewById(R.id.exoBuffering)
         titleText = binding.exoPlayer.findViewById(R.id.exo_text)
         exoPause = binding.exoPlayer.findViewById(R.id.exoPause)
@@ -85,7 +99,7 @@ class VideoStreamingActivity : AppCompatActivity() {
             exoPlay.visibility = View.GONE
         }
         backArrow.setOnClickListener {
-            super.onBackPressed()
+           backPressed()
         }
         exoPrev.setOnClickListener {
             titlePosition--
@@ -106,6 +120,20 @@ class VideoStreamingActivity : AppCompatActivity() {
         Log.d("vd", videoPath)
         Log.d("vd", episodeList.toString())
 
+    }
+
+    override fun onBackPressed() {
+        Log.d("sequence", "1")
+        backPressed()
+    }
+
+    private fun backPressed() {
+        CoroutineScope(Dispatchers.Main).launch {
+            Log.d("sequence", "2")
+            withContext(Dispatchers.Main) { if (player != null && player!!.playbackState == ExoPlayer.STATE_READY) history() }
+            Log.d("sequence", "9")
+            super.onBackPressed()
+        }
     }
 
     private fun getTitleByPosition(position: Int): String {
@@ -145,10 +173,47 @@ class VideoStreamingActivity : AppCompatActivity() {
     }
 
     override fun onStop() {
-        super.onStop()
+        Log.d("onDes", "ONSTOP")
         if (Util.SDK_INT >= 24) {
             releasePlayer()
         }
+        super.onStop()
+    }
+
+    private suspend fun history() {
+        Log.d("sequence", "3")
+
+        coroutineScope {
+            Log.d("sequence", "4")
+
+            Log.d("onDes", player.toString())
+            val history: HashMap<String, Any> = hashMapOf("movie_id" to documentId, "user_id" to firebaseAuth.currentUser!!.uid,
+                "last_played_time" to (player!!.currentPosition / 1000),
+                "total_played_time" to getVideoDurationSeconds(player!!),
+                "finish" to 0, "last_watch" to getDateString(getDate()))
+            val existing = movieDetailViewModel.checkExistingHistory(documentId, firebaseAuth.currentUser!!.uid) as String?
+            Log.d("onDes", existing.toString())
+            Log.d("sequence", "5")
+
+            if (existing == null) {
+                Log.d("onDes", "existing null")
+                movieDetailViewModel.addHistory(history)
+            } else {
+                Log.d("sequence", "6")
+
+                Log.d("onDes", "existing not null")
+                Log.d("onDes", "$existing")
+                Log.d("onDes", getDateString(getDate()))
+                Log.d("onDes", "$player")
+                Log.d("onDes", "${player!!.currentPosition / 1000}")
+                Log.d("onDes", "${getVideoDurationSeconds(player!!)}")
+                movieDetailViewModel.updateHistory(existing, getDateString(getDate()), (player!!.currentPosition / 1000).toString())
+            }
+            Log.d("sequence", "7")
+
+        }
+        Log.d("sequence", "8")
+
     }
 
     private fun initializePlayer() {
@@ -200,6 +265,7 @@ class VideoStreamingActivity : AppCompatActivity() {
             player!!.release()
             player = null
         }
+
     }
 
     inner class PlaybackStateListener : Player.EventListener {

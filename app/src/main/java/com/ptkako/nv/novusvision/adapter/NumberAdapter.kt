@@ -45,7 +45,6 @@ class NumberAdapter(val context: Context,val seriesDetailViewModel: SeriesDetail
                 (context as SeriesDetailActivity).observeEpisodeList()
                 seriesDetailViewModel.rowIndex = position
                 notifyDataSetChanged()
-
             }
             binding.txtSeasonNumber.text = number
             if (seriesDetailViewModel.rowIndex == position) {

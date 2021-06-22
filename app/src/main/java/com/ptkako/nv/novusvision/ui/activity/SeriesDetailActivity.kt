@@ -23,7 +23,6 @@ import com.ptkako.nv.novusvision.viewmodel.SeriesDetailViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.kodein.di.DI
 import org.kodein.di.DIAware
 import org.kodein.di.android.closestDI
@@ -49,11 +48,11 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
 
         supportActionBar!!.title = bundle.movie_name
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            observeDocumentID()
-            numberAdapter = NumberAdapter(this@SeriesDetailActivity, seriesDetailViewModel)
-            setVisibility()
-            observeSeasonIds()
-            setBinding()
+        observeDocumentID()
+        numberAdapter = NumberAdapter(this@SeriesDetailActivity, seriesDetailViewModel)
+        setVisibility()
+        observeSeasonIds()
+        setBinding()
     }
 
     private fun observeSeasonIds() {
@@ -90,6 +89,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         imgMovieCover.setOnClickListener {
             val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("documentid", documentID)
             intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
@@ -97,6 +97,7 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         btnTrailer.setOnClickListener {
             val intent = Intent(this@SeriesDetailActivity, VideoStreamingActivity::class.java)
             intent.putExtra("videopath", bundle.trailer_video_path)
+            intent.putExtra("documentid", documentID)
             intent.putExtra("title", bundle.movie_name)
             startActivity(intent)
         }
@@ -148,10 +149,8 @@ class SeriesDetailActivity : AppCompatActivity(), DIAware {
         movieDetailViewModel.getDocumentIdLiveData(bundle.movie_name).observe(this@SeriesDetailActivity, {
             Log.d("user", it.toString())
             documentID = it
-            episodeAdapter = EpisodeAdapter(this@SeriesDetailActivity, bundle.movie_name, it, firebaseAuth, movieDetailViewModel)
+            episodeAdapter = EpisodeAdapter(this@SeriesDetailActivity, bundle.movie_name, documentID)
             binding.rcvEpisode.adapter = episodeAdapter
-
-
         })
     }
 }
