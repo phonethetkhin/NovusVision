@@ -7,7 +7,7 @@ import org.kodein.di.instanceOrNull
 
 class ViewModelFactory(private val direct: DirectDI) : ViewModelProvider.Factory {
 
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return direct.instanceOrNull<ViewModel>(modelClass.simpleName) as T?
             ?: modelClass.newInstance()
     }
