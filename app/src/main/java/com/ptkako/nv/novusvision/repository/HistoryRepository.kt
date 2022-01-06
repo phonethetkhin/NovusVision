@@ -30,7 +30,6 @@ class HistoryRepository(private val context: Context, private val fireStore: Fir
             Log.d("playlistSequence", "4")
 
             docRef.result!!.forEach {
-                Log.d("playlistSequence", "5, ${it.toObject<HistoryModel>().movie_id}")
                 setStringPref(context, PREF_CURRENT_TIME, PREF_CURRENT_TIME, it.toObject<HistoryModel>().last_watch)
 
                 val movie = withContext(Dispatchers.IO) { getMovieByMovieId(it.toObject<HistoryModel>().movie_id) }
